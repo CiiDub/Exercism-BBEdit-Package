@@ -27,7 +27,7 @@ module Exercism
 			download_regex_pattern = %r{https://exercism.org/tracks/(?<track>[\w-]+)/exercises/(?<exercise>[\w-]+)}
 			urls                   = check_browsers_for_exercism_url
 			track_exercise_hashes  = make_track_exercise_hash( urls, download_regex_pattern )
-			display_webpage_error if track_exercise_hashes.reject( &:nil? ).empty?
+			display_webpage_error if track_exercise_hashes.compact.empty?
 
 			track_exercise_hash = track_exercise_hashes.length > 1 ? exercise_chooser( track_exercise_hashes )[0] : track_exercise_hashes[0]
 			confirm_and_download( WORKSPACE, track_exercise_hash )
