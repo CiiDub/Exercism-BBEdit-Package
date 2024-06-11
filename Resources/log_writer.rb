@@ -3,7 +3,7 @@ module BBEditLogWriter
 	private
 
 	# Methods 'write_to_log' and 'ExercismDownload#open_downloaded' use the shell cmd 'open -a app file' rather then the 'bbedit' command.
-	# This is because you have to install BBEdits commandline tools explicitly, and some folks (expecially novices probably) don't.
+	# This is because you have to install BBEdits commandline tools explicitly, and some folks (expecially/probably novices) don't.
 	def write_to_log( current_dir, doc, message )
 		log_dir   = '~/Library/Containers/com.barebones.bbedit/Data/Library/Logs/BBEdit/Unix Script Output'
 		log_path  = File.join( File.expand_path( log_dir ), doc.sub( /\.\w+$/, '.log' ))
