@@ -1,4 +1,4 @@
-# A module for writing bbedit sytle logs and errors
+# A module for writing bbedit style logs and errors
 module BBEditLogWriter
 	private
 

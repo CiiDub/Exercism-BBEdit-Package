@@ -18,7 +18,7 @@ BBLESSED_PACKAGE_ITEMS = %w[
 @new_install = false
 
 directory PACKAGE do
-	print_dash_header "Fresh install of \'#{TITLE}\'.", "Restart BBEdit if you don\'t see the commands in the script menu."
+	print_dash_header "Fresh install of '#{TITLE}'.", "Restart BBEdit if you don't see the commands in the script menu."
 
 	@new_install = true
 end
@@ -84,5 +84,5 @@ end
 desc "Removes #{TITLE} from BBEdit."
 task :uninstall do
 	rm_rf PACKAGE, verbose: false
-	print_dash_header "\'#{TITLE}\' was removed from BBEdit"
+	print_dash_header "'#{TITLE}' was removed from BBEdit"
 end
