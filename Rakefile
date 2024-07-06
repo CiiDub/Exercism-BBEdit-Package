@@ -87,7 +87,7 @@ task install: PACKAGE do
 	project_files = blessed_items.reject { | item | File.directory? item }
 	updated_files = update_install( project_files )
 	deleted_items = remove_orphaned_items( blessed_items )
-	next if @new_install
+	exit if @new_install
 
 	print_updates( updated_files, deleted_items )
 end
