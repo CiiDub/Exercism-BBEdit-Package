@@ -7,8 +7,6 @@ end
 
 # A helper class to build Applescrit dialog boxes.
 module DialogBuilder
-	private
-
 	def display_chooser_with( items:, prompt:, default_items: [items[0]], multiselect: false )
 		make_list_string = ->( strs ) {
 			# Weird Applescript string works, don't touch!.
@@ -41,8 +39,6 @@ end
 
 # Dialog Boxes for use with the Exercism module.
 module ExercismDialogs
-	private
-
 	def exercise_chooser( exercises )
 		exercise_selections = exercises.map do | exercise |
 			"Exercise #{exercise['exercise'].gsub( /[-_]/, ' ' ).mytitlecase} in track #{exercise['track'].gsub( /[-_]/, ' ' ).mytitlecase}"
