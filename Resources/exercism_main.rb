@@ -6,10 +6,6 @@ require_relative 'log_writer'
 # Module for integrating BBEdit with the educational website exercism.org and it's CLI tool.
 module Exercism
 	extend self
-	extend DialogBuilder
-	extend ExercismDialogs
-	extend ExercismDownload
-	extend BBEditLogWriter
 
 	WORKSPACE   = `exercism workspace`.chomp.freeze
 	DOC         = ENV['BB_DOC_NAME'].freeze
@@ -63,6 +59,11 @@ module Exercism
 	end
 
 	private
+
+	extend DialogBuilder
+	extend ExercismDialogs
+	extend ExercismDownload
+	extend BBEditLogWriter
 
 	def check_clipboard_for_exercism_command
 		Open3.capture2e( 'pbpaste', '-pboard general' )[0]

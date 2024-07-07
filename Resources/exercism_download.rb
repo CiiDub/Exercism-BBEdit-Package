@@ -1,7 +1,5 @@
 # Module used to download exercisms
 module ExercismDownload
-	private
-
 	def confirm_and_download( workspace, track_exercise_hash )
 		track     = track_exercise_hash['track']
 		exercise  = track_exercise_hash['exercise']

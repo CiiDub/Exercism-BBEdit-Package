@@ -24,11 +24,15 @@ directory PACKAGE do
 end
 
 def make_package_dir_structure( blessed_items )
+	updated_dirs = []
 	blessed_items.each do | item |
 		next unless File.directory? item
 
-		mkdir_p File.join( PACKAGE, 'Contents', item ), verbose: false
+		dir = File.join( PACKAGE, 'Contents', item )
+		updated_dirs << item unless Dir.exist? dir
+		mkdir_p( dir, verbose: false )
 	end
+	updated_dirs
 end
 
 def update_install( files )
@@ -83,13 +87,13 @@ end
 desc "Installs #{TITLE} for use with BBEdit"
 task install: PACKAGE do
 	blessed_items = FileList.new( '**/*' ).select { | file | blessed? file }
-	make_package_dir_structure( blessed_items )
+	updated_dirs = make_package_dir_structure( blessed_items )
 	project_files = blessed_items.reject { | item | File.directory? item }
 	updated_files = update_install( project_files )
 	deleted_items = remove_orphaned_items( blessed_items )
 	exit if @new_install
 
-	print_updates( updated_files, deleted_items )
+	print_updates( updated_files + updated_dirs, deleted_items )
 end
 
 desc "Removes #{TITLE} from BBEdit."
