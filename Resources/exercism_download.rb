@@ -21,7 +21,7 @@ module ExercismDownload
 
 	def download_exercise( workspace, track, exercise, force: false )
 		overwrite = force ? '--force' : ''
-		message   = IO.popen( ['exercism', 'download', overwrite, "--track=#{track}", "--exercise=#{exercise}", { err: [:child, :out] }] ).read
+		message   = Open3.capture2e( 'exercism', 'download', overwrite, "--track=#{track}", "--exercise=#{exercise}" )[0]
 		display_download_error( message ) unless /^Downloaded to/.match? message
 
 		open_downloaded( workspace, track, exercise )
