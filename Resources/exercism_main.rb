@@ -1,4 +1,5 @@
 require 'open3'
+require 'json'
 require_relative 'exercism_dialogs'
 require_relative 'exercism_download'
 require_relative 'log_writer'
@@ -7,9 +8,10 @@ require_relative 'log_writer'
 module Exercism
 	extend self
 
-	WORKSPACE   = `exercism workspace`.chomp.freeze
-	DOC         = ENV['BB_DOC_NAME'].freeze
-	CURRENT_DIR = ENV['BB_DOC_PATH'].gsub( DOC, '' ).freeze
+	WORKSPACE    = `exercism workspace`.chomp.freeze
+	DOC          = ENV['BB_DOC_NAME'].freeze
+	CURRENT_DIR  = ENV['BB_DOC_PATH'].gsub( DOC, '' ).freeze
+	EXERCISE_DIR = find_exercism_dir( CURRENT_DIR ).freeze
 
 	def download_exercise_with_clipboard
 		clipboard_regex_pattern = /exercism download --track=(?<track>[\w-]+) --exercise=(?<exercise>[\w-]+)/
@@ -33,27 +35,27 @@ module Exercism
 	def open_current_exercise
 		display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
-		system( 'exercism', 'open', CURRENT_DIR )
+		system( 'exercism', 'open', EXERCISE_DIR )
 	end
 
 	def test_current_exercise
 		display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
-		Dir.chdir CURRENT_DIR do
+		Dir.chdir EXERCISE_DIR do
 			message = Open3.capture2e( 'exercism', 'test' )[0]
-			write_to_log( CURRENT_DIR, DOC, message )
+			write_to_log( EXERCISE_DIR, DOC, message )
 		end
 	end
 
 	def submit_current_exercise
 		display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
-		Dir.chdir( CURRENT_DIR ) do
+		Dir.chdir( EXERCISE_DIR ) do
 			message, status = Open3.capture2e( 'exercism', 'submit', DOC )
 
 			display_upload_error unless status.success?
 
-			write_to_log( CURRENT_DIR, DOC, message )
+			write_to_log( EXERCISE_DIR, DOC, message )
 			open_current_exercise
 		end
 	end
@@ -89,6 +91,27 @@ module Exercism
 
 	def workspace?
 		CURRENT_DIR.start_with? WORKSPACE
+	end
+
+	def find_exercism_dir( cur_dir, search_iterations = 5 )
+		previous_dir = Dir.pwd
+		Dir.chdir cur_dir
+		parent_dirs_searched = 1
+		dir_search_result =
+			loop do
+				break :out_of_workspace unless workspace?
+
+				break Dir.pwd if Dir.children( Dir.pwd ).include? '.exercism'
+
+				break :out_of_workspace if parent_dirs_searched >= search_iterations
+
+				parent_dirs_searched += 1
+				Dir.chdir '..'
+			end
+		Dir.chdir previous_dir
+		display_outside_workspace_error( DOC, WORKSPACE ) if dir_search_result == :out_of_workspace
+
+		dir_search_result
 	end
 
 	def exercise_exists?( track, exercise )
