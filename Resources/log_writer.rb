@@ -6,9 +6,13 @@ module BBEditStyleLogWriter
     log_dir        = '~/Library/Containers/com.barebones.bbedit/Data/Library/Logs/BBEdit/Unix Script Output'
     log_name       = fun_log_name( current_dir, doc )
     log_path       = File.join( File.expand_path( log_dir ), log_name )
-    header_message = make_bbedit_style_output( current_dir, doc, message )
+    header_message = make_bbedit_style_output( current_dir, doc, clean_whitespace( message ))
     File.write( log_path, header_message )
     system( 'open', '-a', 'BBEdit', log_path )
+  end
+
+  def clean_whitespace( str )
+    str.split( "\n" ).map( &:strip ).reject( &:empty? ).join( "\n" )
   end
 
   private
