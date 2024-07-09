@@ -5,13 +5,15 @@ class String
 	end
 end
 
+# Weird Applescript string stuff. Beware, thar be dragons!.
+# rubocop:disable Style::StringLiterals
+
 # A helper class to build Applescrit dialog boxes.
 module DialogBuilder
 	def display_chooser_with( items:, prompt:, default_items: [items[0]], multiselect: false )
 		make_list_string = ->( strs ) {
-			# Weird Applescript string works, don't touch!.
 			strs
-				.map { | item | "\"" + item + "\"" } # rubocop:disable Style::StringLiterals
+				.map { | item | "\"" + item + "\"" }
 				.join( ', ' )
 		}
 
@@ -74,7 +76,7 @@ module ExercismDialogs
 			buttons: ['OK'],
 			highlighted_button: 1
 		)
-		exit( 0 )
+		exit 0
 	end
 
 	def display_webpage_error
@@ -84,7 +86,7 @@ module ExercismDialogs
 			buttons: ['OK'],
 			highlighted_button: 1
 		)
-		exit( 0 )
+		exit 0
 	end
 
 	def display_outside_workspace_error( doc, workspace )
@@ -94,7 +96,7 @@ module ExercismDialogs
 			buttons: ['OK'],
 			highlighted_button: 1
 		)
-		exit( 0 )
+		exit 0
 	end
 
 	def display_download_error( message )
@@ -102,7 +104,7 @@ module ExercismDialogs
 			title: 'Error Downloading',
 			message: message
 		)
-		exit( 0 )
+		exit 0
 	end
 
 	def display_download_confirmation( track, exercise )
@@ -128,6 +130,6 @@ module ExercismDialogs
 			title: 'Error Submiting',
 			message: 'Your submition did not upload.\n\nDid you try turning it off and on agian?'
 		)
-		exit( 0 )
+		exit 0
 	end
 end
