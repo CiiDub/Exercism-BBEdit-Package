@@ -5,6 +5,9 @@ require_relative 'exercism_download'
 require_relative 'log_writer'
 require_relative 'solutions'
 
+# Methods 'write_to_log' and 'ExercismDownload#open_downloaded' use the shell cmd 'open -a app file' rather then the 'bbedit' command.
+# This is because you have to install BBEdits commandline tools explicitly, and some folks (expecially/probably novices) might not.
+
 # Module for integrating BBEdit with the educational website exercism.org and it's CLI tool.
 module Exercism
 	extend self
