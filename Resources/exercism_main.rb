@@ -55,24 +55,26 @@ module Exercism
     display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
     dir = exercism_dir( CURRENT_DIR )
-    Dir.chdir dir do
-      solutions = -> {
-        solution = Solutions.list dir
-        return solution if solution.size == 1
 
-        solution_chooser( solutions )
-      }
-      message, status = Open3.capture2e( 'exercism', 'submit', solutions.call.shelljoin )
-      display_upload_error unless status.success?
+    solutions = -> {
+      solution = Solutions.list dir
+      return solution if solution.size == 1
 
-      BBEditStyleLogWriter.write( dir, DOC, message )
-      open_current_exercise
-    end
+      solution_chooser( solutions )
+    }
+
+    message, status =
+      Dir.chdir( dir ) do
+        Open3.capture2e( 'exercism', 'submit', solutions.call.shelljoin )
+      end
+    display_upload_error( BBEditStyleLogWriter.clean_whitespace( message )) unless status.success?
+
+    BBEditStyleLogWriter.write( dir, DOC, message )
+    open_current_exercise
   end
 
   private
 
-  extend DialogBuilder
   extend ExercismDialogs
   extend ExercismDownload
 
