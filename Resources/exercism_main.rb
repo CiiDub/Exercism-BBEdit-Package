@@ -15,7 +15,6 @@ module Exercism
 	WORKSPACE    = `exercism workspace`.chomp.freeze
 	DOC          = ENV['BB_DOC_NAME'].freeze
 	CURRENT_DIR  = ENV['BB_DOC_PATH'].gsub( DOC, '' ).freeze
-	EXERCISE_DIR = find_exercism_dir( CURRENT_DIR ).freeze
 
 	def download_exercise_with_clipboard
 		clipboard_regex_pattern = /exercism download --track=(?<track>[\w-]+) --exercise=(?<exercise>[\w-]+)/
@@ -39,24 +38,26 @@ module Exercism
 	def open_current_exercise
 		display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
-		system( 'exercism', 'open', EXERCISE_DIR )
+		system( 'exercism', 'open', exercism_dir( CURRENT_DIR )  )
 	end
 
 	def test_current_exercise
 		display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
-		Dir.chdir EXERCISE_DIR do
+		dir = exercism_dir( CURRENT_DIR )
+		Dir.chdir dir do
 			message = Open3.capture2e( 'exercism', 'test' )[0]
-			write_to_log( EXERCISE_DIR, DOC, message )
+			write_to_log( dir, DOC, message )
 		end
 	end
 
 	def submit_current_exercise
 		display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
-		Dir.chdir( EXERCISE_DIR ) do
+		dir = exercism_dir( CURRENT_DIR )
+		Dir.chdir dir do
 			solutions = -> {
-				solution = Solutions.list( EXERCISE_DIR )
+				solution = Solutions.list dir
 				return solution if solution.size == 1
 
 				solution_chooser( solutions )
@@ -64,7 +65,7 @@ module Exercism
 			message, status = Open3.capture2e( 'exercism', 'submit', solutions.call.shelljoin )
 			display_upload_error unless status.success?
 
-			write_to_log( EXERCISE_DIR, DOC, message )
+			write_to_log( dir, DOC, message )
 			open_current_exercise
 		end
 	end
@@ -102,7 +103,7 @@ module Exercism
 		CURRENT_DIR.start_with? WORKSPACE
 	end
 
-	def find_exercism_dir( cur_dir, search_iterations = 5 )
+	def exercism_dir( cur_dir, search_iterations = 5 )
 		previous_dir = Dir.pwd
 		Dir.chdir cur_dir
 		parent_dirs_searched = 1
