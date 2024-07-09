@@ -1,3 +1,5 @@
+require 'open3'
+
 # Added String#mytitlecase for convenience.
 class String
   def mytitlecase( delimiter = ' ' )
@@ -5,11 +7,13 @@ class String
   end
 end
 
-# Weird Applescript string stuff. Beware, thar be dragons!.
+# Weird Applescript string stuff. Beware, thar be dragons!
 # rubocop:disable Style::StringLiterals
 
 # A helper class to build Applescrit dialog boxes.
 module DialogBuilder
+  extend self
+
   def display_chooser_with( items:, prompt:, default_items: [items[0]], multiselect: false )
     make_list_string = ->( strs ) {
       strs
@@ -46,7 +50,7 @@ module ExercismDialogs
       "Exercise #{exercise['exercise'].gsub( /[-_]/, ' ' ).mytitlecase} in track #{exercise['track'].gsub( /[-_]/, ' ' ).mytitlecase}"
     end
 
-    chosen_exercise = display_chooser_with(
+    chosen_exercise = DialogBuilder.display_chooser_with(
       items: exercise_selections,
       prompt: 'Which Exercise would you like to download?'
     )
@@ -60,17 +64,18 @@ module ExercismDialogs
   end
 
   def solution_chooser( solutions )
-    display_chooser_with(
-      items: solutions,
-      prompt: 'Choose one or more solutions to submit',
-      multiselect: true
-    )
+    DialogBuilder
+      .display_chooser_with(
+        items: solutions,
+        prompt: 'Choose one or more solutions to submit',
+        multiselect: true
+      )
       .chomp
       .split ', '
   end
 
   def display_clipboard_error
-    display_dialog_with(
+    DialogBuilder.display_dialog_with(
       title: 'Exercism Command Not Found',
       message: '🌎 Open exersism.org\n\n🔎 Find the track and the exercise you want to do.\n\n📋 Click on the copy icon under \"WORK LOCALLY (VIA CLI)\"\n\n☑️️ Then try the command again.',
       buttons: ['OK'],
@@ -80,7 +85,7 @@ module ExercismDialogs
   end
 
   def display_webpage_error
-    display_dialog_with(
+    DialogBuilder.display_dialog_with(
       title: 'Exercism Exercise Not Open',
       message: '🌎 Open exersism.org\n\n🔎 Find the track and the exercise you want to do.\n\n☑️️ Then try the command again.',
       buttons: ['OK'],
@@ -90,7 +95,7 @@ module ExercismDialogs
   end
 
   def display_outside_workspace_error( doc, workspace )
-    display_dialog_with(
+    DialogBuilder.display_dialog_with(
       title: 'You Are Outside the Exercism Workspace.',
       message: " Sorry, \'#{doc}\' is not an exercise.\n\n Find your exercises in the Exercism workspace:\n\'#{workspace}\'",
       buttons: ['OK'],
@@ -100,7 +105,7 @@ module ExercismDialogs
   end
 
   def display_download_error( message )
-    display_dialog_with(
+    DialogBuilder.display_dialog_with(
       title: 'Error Downloading',
       message: message
     )
@@ -108,7 +113,7 @@ module ExercismDialogs
   end
 
   def display_download_confirmation( track, exercise )
-    display_dialog_with(
+    DialogBuilder.display_dialog_with(
       title: 'Confirm Exercism Track and Exercise',
       message: "Download exercise \'#{exercise.gsub( /[-_]/, ' ' ).mytitlecase}\' from track \'#{track.gsub( /[-_]/, ' ' ).mytitlecase}?\'",
       buttons: ['Cancel', 'Download'],
@@ -117,7 +122,7 @@ module ExercismDialogs
   end
 
   def display_overwrite_confirmation( track, exercise )
-    display_dialog_with(
+    DialogBuilder.display_dialog_with(
       title: 'Exercism Track and Exercise Exists',
       message: "Exercise \'#{exercise.gsub( /[-_]/, ' ' ).mytitlecase}\' from track \'#{track.gsub( /[-_]/, ' ' ).mytitlecase}\' has been downloaded.",
       buttons: ['Cancel', 'Open', 'Overwrite'],
@@ -125,11 +130,14 @@ module ExercismDialogs
     )
   end
 
-  def display_upload_error
-    display_dialog_with(
+  def display_upload_error( message )
+    DialogBuilder.display_dialog_with(
       title: 'Error Submiting',
-      message: 'Your submition did not upload.\n\nDid you try turning it off and on agian?'
+      message: 'Your submition did not upload.\n\n' + message,
+      buttons: ['OK'],
+      highlighted_button: 1
     )
     exit 0
   end
 end
+# rubocop:enable Style::StringLiterals
