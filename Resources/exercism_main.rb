@@ -52,8 +52,13 @@ module Exercism
 		display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
 		Dir.chdir( EXERCISE_DIR ) do
-			solutions = Solutions.list( EXERCISE_DIR )
-			message, status = Open3.capture2e( 'exercism', 'submit', solutions.shelljoin )
+			solutions = -> {
+				solution = Solutions.list( EXERCISE_DIR )
+				return solution if solution.size == 1
+
+				solution_chooser( solutions )
+			}
+			message, status = Open3.capture2e( 'exercism', 'submit', solutions.call.shelljoin )
 			display_upload_error unless status.success?
 
 			write_to_log( EXERCISE_DIR, DOC, message )
