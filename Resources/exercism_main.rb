@@ -1,8 +1,9 @@
 require 'open3'
-require 'json'
+require 'shellwords'
 require_relative 'exercism_dialogs'
 require_relative 'exercism_download'
 require_relative 'log_writer'
+require_relative 'solutions'
 
 # Module for integrating BBEdit with the educational website exercism.org and it's CLI tool.
 module Exercism
@@ -51,8 +52,8 @@ module Exercism
 		display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
 		Dir.chdir( EXERCISE_DIR ) do
-			message, status = Open3.capture2e( 'exercism', 'submit', DOC )
-
+			solutions = Solutions.list( EXERCISE_DIR )
+			message, status = Open3.capture2e( 'exercism', 'submit', solutions.shelljoin )
 			display_upload_error unless status.success?
 
 			write_to_log( EXERCISE_DIR, DOC, message )

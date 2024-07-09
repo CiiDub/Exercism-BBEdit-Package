@@ -34,11 +34,7 @@ module ExercismDownload
 
 	def exercise_filename( workspace, track, exercise )
 		dir      = File.join( workspace, track, exercise )
-		filename =
-			Dir
-			.children( dir )
-			.grep( /#{exercise.gsub( '-', '_' )}\.\w{2,15}/ )
-			.first
+		filename = Solutions.list( dir ).first
 		File.join( dir, filename )
 	end
 end
