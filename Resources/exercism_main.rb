@@ -46,6 +46,7 @@ module Exercism
 
     dir = exercism_dir( CURRENT_DIR )
     Dir.chdir dir do
+      save_doc
       message = Open3.capture2e( 'exercism', 'test' )[0]
       BBEditStyleLogWriter.write( dir, DOC, message )
     end
@@ -55,14 +56,13 @@ module Exercism
     display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
     dir = exercism_dir( CURRENT_DIR )
-
     solutions = -> {
       solution = Solutions.list dir
       return solution if solution.size == 1
 
       solution_chooser( solutions )
     }
-
+    save_doc
     message, status =
       Dir.chdir( dir ) do
         Open3.capture2e( 'exercism', 'submit', solutions.call.shelljoin )
@@ -125,5 +125,9 @@ module Exercism
 
   def exercise_exists?( track, exercise )
     Dir.exist? File.join( WORKSPACE, track, exercise )
+  end
+
+  def save_doc( doc = DOC )
+    system( 'osascript', '-e', "tell application \"BBEdit\" to save document \"#{doc}\"" )
   end
 end
