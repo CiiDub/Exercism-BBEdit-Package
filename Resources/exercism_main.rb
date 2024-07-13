@@ -47,8 +47,8 @@ module Exercism
     dir = exercism_dir( CURRENT_DIR )
     Dir.chdir dir do
       save_doc
-      message = Open3.capture2e( 'exercism', 'test' )[0]
-      BBEditStyleLogWriter.write( dir, DOC, message )
+      message, _status = Open3.capture2e( 'exercism', 'test' )
+      BBEditStyleLogWriter.write( dir, Solutions.list( dir ).first, message )
     end
   end
 
