@@ -4,6 +4,7 @@ require_relative 'exercism_dialogs'
 require_relative 'exercism_download'
 require_relative 'log_writer'
 require_relative 'solutions'
+require_relative 'package_settings'
 
 # Methods ' BBEditStyleLogWriter.write' and 'ExercismDownload#open_downloaded' use the shell cmd 'open -a app file' rather then the 'bbedit' command.
 # This is because you have to install BBEdits commandline tools explicitly, and some folks (expecially/probably novices) might not.
@@ -45,11 +46,11 @@ module Exercism
     display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
     dir = exercism_dir( CURRENT_DIR )
-    Dir.chdir dir do
-      save_doc
-      message, _status = Open3.capture2e( 'exercism', 'test' )
-      BBEditStyleLogWriter.write( dir, Solutions.list( dir ).first, message )
-    end
+    save_doc if Settings.autosave_on_test?
+    message, status = Dir.chdir( dir ) { Open3.capture2e 'exercism', 'test' }
+    tag_name = Settings.tag_on_test.chomp
+    tag_exercise( status.success?, tag_name, dir ) if tag_name
+    BBEditStyleLogWriter.write( dir, Solutions.list( dir ).first, message )
   end
 
   def submit_current_exercise
@@ -62,7 +63,7 @@ module Exercism
 
       solution_chooser( solutions )
     }
-    save_doc
+    save_doc if Settings.autosave_on_submit?
     message, status =
       Dir.chdir( dir ) do
         Open3.capture2e( 'exercism', 'submit', solutions.call.shelljoin )
@@ -129,5 +130,12 @@ module Exercism
 
   def save_doc( doc = DOC )
     system( 'osascript', '-e', "tell application \"BBEdit\" to save document \"#{doc}\"" )
+  end
+
+  def tag_exercise( success, tag_name, dir )
+    Dir.chdir '../../Resources' do
+      cmd = success ? 'success' : 'fail'
+      system( 'osascript', 'finder_tag_setter.applescript', cmd, tag_name, dir, out: File::NULL )
+    end
   end
 end
