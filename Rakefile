@@ -121,28 +121,18 @@ namespace 'settings' do
   end
 
   desc 'Set option to autosave open solution before submiting.'
-  task :autosave_on_submit, [:on] do | _task, args |
-    on_off =
-      case args[:on]
-      when /true|1|on/ then '1'
-      when /false|0|off/ then '0'
-      else '0'
-      end
+  task :autosave_on_submit, [:on_off] do | _task, args |
+    on_off = args[:on_off].match?( /true|1|on/ ) ? '1' : 0
     set_it 'AutoSaveOnSubmit', on_off
     status = on_off.to_i.zero? ? 'off' : 'on'
     print_dash_header "Autosave on submit is #{status}."
   end
 
   desc 'Set option to autosave open solution before testing.'
-  task :autosave_on_test, [:on] do | _task, args |
-    on_off =
-      case args[:on]
-      when /true|1|on/ then '1'
-      when /false|0|off/ then '0'
-      else '0'
-      end
+  task :autosave_on_test, [:on_off] do | _task, args |
+    on_off = args[:on_off].match?( /true|1|on/ ) ? '1' : 0
     set_it 'AutoSaveOnTest', on_off
     status = on_off.to_i.zero? ? 'off' : 'on'
-    print_dash_header "Autosave on submit is #{status}."
+    print_dash_header "Autosave on Test is #{status}."
   end
 end
