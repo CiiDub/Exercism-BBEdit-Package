@@ -45,5 +45,8 @@ on run argv
 	set theFile to (item 3 of argv) as POSIX file
 	my removeTag:theTag forPath:theFile -- remove tag everytime to prevent duplicates
 	if theCmd = "success" then my addTags:{theTag} forPath:(POSIX path of theFile)
+	-- Crude way of getting the project window to update
+	-- When test results pop up it returns to BBEdit.
+	tell application "Finder" to activate 
 end run
 
