@@ -133,6 +133,6 @@ namespace 'settings' do
     on_off = args[:on_off].match?( /true|1|on/ ) ? '1' : 0
     set_it 'AutoSaveOnTest', on_off
     status = on_off.to_i.zero? ? 'off' : 'on'
-    print_dash_header "Autosave on submit is #{status}."
+    print_dash_header "Autosave on Test is #{status}."
   end
 end
