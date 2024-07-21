@@ -2,16 +2,20 @@ require 'open3'
 require 'shellwords'
 require_relative 'exercism_dialogs'
 require_relative 'exercism_download'
+require_relative 'exercism_workspace'
 require_relative 'log_writer'
 require_relative 'solutions'
 require_relative 'package_settings'
 
-# Methods ' BBEditStyleLogWriter.write' and 'ExercismDownload#open_downloaded' use the shell cmd 'open -a app file' rather then the 'bbedit' command.
+# NOTE: Methods "BBEditStyleLogWriter.write" and "ExercismDownload#open_downloaded" use the shell cmd "open -a <app> <file>" rather then the "bbedit <file>" command.
 # This is because you have to install BBEdits commandline tools explicitly, and some folks (expecially/probably novices) might not.
 
-# Module for integrating BBEdit with the educational website exercism.org and it's CLI tool.
+# Module for integrating BBEdit with the educational website exercism.org and it's commandline tool.
 module Exercism
   extend self
+  extend ExercismWorkspaceAndExercises
+  extend ExercismDialogs
+  extend ExercismDownload
 
   WORKSPACE    = `exercism workspace`.chomp.freeze
   DOC          = ENV['BB_DOC_NAME'].freeze
@@ -23,119 +27,54 @@ module Exercism
     track_exercise_hash     = make_track_exercise_hash( clipboard, clipboard_regex_pattern )[0]
     display_clipboard_error if track_exercise_hash.nil?
 
-    confirm_and_download( WORKSPACE, track_exercise_hash )
+    confirm_and_download WORKSPACE, track_exercise_hash
   end
 
   def download_exercise_with_website
     download_regex_pattern = %r{https://exercism.org/tracks/(?<track>[\w-]+)/exercises/(?<exercise>[\w-]+)}
     urls                   = check_browsers_for_exercism_url
-    track_exercise_hashes  = make_track_exercise_hash( urls, download_regex_pattern )
+    track_exercise_hashes  = make_track_exercise_hash urls, download_regex_pattern
     display_webpage_error if track_exercise_hashes.compact.empty?
 
     track_exercise_hash = track_exercise_hashes.empty? ? exercise_chooser( track_exercise_hashes )[0] : track_exercise_hashes[0]
-    confirm_and_download( WORKSPACE, track_exercise_hash )
+    confirm_and_download WORKSPACE, track_exercise_hash
   end
 
   def open_current_exercise
     display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
-    system( 'exercism', 'open', exercism_dir( CURRENT_DIR )  )
+    system 'exercism', 'open', exercism_dir( CURRENT_DIR )
   end
 
   def test_current_exercise
     display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
-    dir = exercism_dir( CURRENT_DIR )
+    dir = exercism_dir CURRENT_DIR
     save_doc if Settings.autosave_on_test?
     message, status = Dir.chdir( dir ) { Open3.capture2e 'exercism', 'test' }
     tag_name = Settings.tag_on_test.chomp
     tag_exercise( status.success?, tag_name, dir ) if tag_name
-    BBEditStyleLogWriter.write( dir, Solutions.list( dir ).first, message )
+    BBEditStyleLogWriter.write dir, Solutions.list( dir ).first, message
   end
 
   def submit_current_exercise
     display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
-    dir = exercism_dir( CURRENT_DIR )
+    dir = exercism_dir CURRENT_DIR
     solutions = -> {
       solution = Solutions.list dir
       return solution if solution.size == 1
 
-      solution_chooser( solutions )
+      solution_chooser solutions
     }
     save_doc if Settings.autosave_on_submit?
     message, status =
       Dir.chdir( dir ) do
-        Open3.capture2e( 'exercism', 'submit', solutions.call.shelljoin )
+        Open3.capture2e 'exercism', 'submit', solutions.call.shelljoin
       end
     display_upload_error( BBEditStyleLogWriter.clean_whitespace( message )) unless status.success?
 
-    BBEditStyleLogWriter.write( dir, DOC, message )
+    BBEditStyleLogWriter.write dir, DOC, message
     open_current_exercise
-  end
-
-  private
-
-  extend ExercismDialogs
-  extend ExercismDownload
-
-  def check_clipboard_for_exercism_command
-    Open3.capture2e( 'pbpaste', '-pboard general' )[0]
-  end
-
-  def check_browsers_for_exercism_url
-    Dir.chdir '../../Resources' do
-      Open3.capture2( 'osascript', 'get_ex_url.applescript' )[0].chomp.split( "\n" )
-    end
-  end
-
-  def make_track_exercise_hash( *strs, regex )
-    strs
-      .flatten
-      .uniq
-      .map do | str |
-        match = regex.match( str )
-        next match if match.nil?
-
-        match.named_captures
-      end
-  end
-
-  def workspace?
-    CURRENT_DIR.start_with? WORKSPACE
-  end
-
-  def exercism_dir( cur_dir, search_iterations = 5 )
-    previous_dir = Dir.pwd
-    Dir.chdir cur_dir
-    dir_search_result =
-      loop.with_index( 1 ) do | _, parent_dirs_searched |
-        break :out_of_workspace unless workspace?
-
-        break Dir.pwd if Dir.children( Dir.pwd ).include? '.exercism'
-
-        break :out_of_workspace if parent_dirs_searched >= search_iterations
-
-        Dir.chdir '..'
-      end
-    Dir.chdir previous_dir
-    display_outside_workspace_error( DOC, WORKSPACE ) if dir_search_result == :out_of_workspace
-
-    dir_search_result
-  end
-
-  def exercise_exists?( track, exercise )
-    Dir.exist? File.join( WORKSPACE, track, exercise )
-  end
-
-  def save_doc( doc = DOC )
-    system( 'osascript', '-e', "tell application \"BBEdit\" to save document \"#{doc}\"" )
-  end
-
-  def tag_exercise( success, tag_name, dir )
-    Dir.chdir '../../Resources' do
-      cmd = success ? 'success' : 'fail'
-      system( 'osascript', 'finder_tag_setter.applescript', cmd, tag_name, dir, out: File::NULL )
-    end
   end
 end
