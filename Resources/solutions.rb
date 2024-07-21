@@ -7,6 +7,6 @@ module Solutions
   def list( exercise_dir )
     JSON
       .load_file( File.join( exercise_dir, '.exercism', 'config.json' ))
-      .dig( 'files', 'solution' )
+      .dig 'files', 'solution'
   end
 end

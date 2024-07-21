@@ -1,4 +1,4 @@
-# A module for writing bbedit style logs and errors
+# A module for writing bbedit style logs.
 module BBEditStyleLogWriter
   extend self
 
@@ -7,12 +7,12 @@ module BBEditStyleLogWriter
     log_name       = fun_log_name( current_dir, doc )
     log_path       = File.join( File.expand_path( log_dir ), log_name )
     header_message = make_bbedit_style_output( current_dir, doc, clean_whitespace( message ))
-    File.write( log_path, header_message )
-    system( 'open', '-a', 'BBEdit', log_path )
+    File.write log_path, header_message
+    system 'open', '-a', 'BBEdit', log_path
   end
 
   def clean_whitespace( str )
-    str.split( "\n" ).map( &:strip ).reject( &:empty? ).join( "\n" )
+    str.split( "\n" ).map( &:strip ).reject( &:empty? ).join "\n"
   end
 
   private
