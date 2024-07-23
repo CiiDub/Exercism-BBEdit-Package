@@ -52,7 +52,7 @@ module Exercism
     dir = exercism_dir CURRENT_DIR
     save_doc if Settings.autosave_on_test?
     message, status = Dir.chdir( dir ) { Open3.capture2e 'exercism', 'test' }
-    tag_name = Settings.tag_on_test.chomp
+    tag_name = Settings.tag_on_test
     tag_exercise( status.success?, tag_name, dir ) if tag_name
     BBEditStyleLogWriter.write dir, Solutions.list( dir ).first, message
   end
