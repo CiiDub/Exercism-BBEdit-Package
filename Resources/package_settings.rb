@@ -11,7 +11,7 @@ module Settings
     output, _status = Open3.capture2e BUDDY, '-c', 'print :ExercismSettings:TagOnTest', PLIST
     return false if output.chomp.empty?
 
-    output
+    output.chomp
   end
 
   def autosave_on_test?
