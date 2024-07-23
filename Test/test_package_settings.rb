@@ -29,6 +29,10 @@ describe 'Setting' do
     Settings::PLIST = @plist.path
   end
 
+  after do
+    @plist.delete
+  end
+
   it '#tag_on_test should return "tag_name"' do
     @plist << plist_text( tag_name: 'tag_name' )
     @plist.rewind
