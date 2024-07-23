@@ -32,36 +32,36 @@ describe 'Setting' do
   it '#tag_on_test should return "tag_name"' do
     @plist << plist_text( tag_name: 'tag_name' )
     @plist.rewind
-    expect Settings.tag_on_test == 'tag_name'
+    expect( Settings.tag_on_test ).must_equal 'tag_name'
   end
 
   it '#tag_on_test should return false' do
     @plist << plist_text
     @plist.rewind
-    expect Settings.tag_on_test == false
+    expect( Settings.tag_on_test ).must_equal false
   end
 
   it '#autosave_on_test? should return true' do
     @plist << plist_text( save_on_test: '1' )
     @plist.rewind
-    expect Settings.tag_on_test == true
+    expect( Settings.autosave_on_test? ).must_equal true
   end
 
   it '#autosave_on_test? should return false' do
     @plist << plist_text
     @plist.rewind
-    expect Settings.tag_on_test == false
+    expect( Settings.autosave_on_test? ).must_equal false
   end
 
   it '#autosave_on_submit? should return true' do
-    @plist << plist_text( save_on_test: '1' )
+    @plist << plist_text( save_on_submit: '1' )
     @plist.rewind
-    expect Settings.tag_on_test == true
+    expect( Settings.autosave_on_submit? ).must_equal true
   end
 
   it '#autosave_on_submit? should return false' do
     @plist << plist_text
     @plist.rewind
-    expect Settings.tag_on_test == false
+    expect( Settings.autosave_on_submit? ).must_equal false
   end
 end
