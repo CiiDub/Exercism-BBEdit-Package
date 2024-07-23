@@ -4,9 +4,11 @@ require 'json'
 module Solutions
   extend self
 
+  CONFIG_FILE = 'config.json'.freeze
+
   def list( exercise_dir )
     JSON
-      .load_file( File.join( exercise_dir, '.exercism', 'config.json' ))
+      .load_file( File.join( exercise_dir, '.exercism', CONFIG_FILE ))
       .dig 'files', 'solution'
   end
 end
