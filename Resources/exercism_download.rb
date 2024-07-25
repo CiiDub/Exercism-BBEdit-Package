@@ -34,12 +34,6 @@ module ExercismDownload
     system 'open', '-a', 'BBEdit', file_path
   end
 
-  def exercise_filename( workspace, track, exercise )
-    dir      = File.join workspace, track, exercise
-    filename = Solutions.list( dir ).first
-    File.join dir, filename
-  end
-
   def check_clipboard_for_exercism_command
     Open3.capture2e( 'pbpaste', '-pboard general' ).first
   end

@@ -29,6 +29,12 @@ module ExercismWorkspaceAndExercises
     Dir.exist? File.join workspace, track, exercise
   end
 
+  def exercise_filename( workspace, track, exercise )
+    dir      = File.join workspace, track, exercise
+    filename = Solutions.list( dir ).first
+    File.join dir, filename
+  end
+
   def save_doc( doc = Exercism::DOC )
     system 'osascript', '-e', "tell application \"BBEdit\" to save document \"#{doc}\""
   end
