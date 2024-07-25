@@ -43,15 +43,18 @@ describe 'Solutions' do
     FileUtils.rmdir '/tmp/.exercism'
   end
 
-  it '#list with one solutions' do
+  it '#choose_if_many with one solution' do
     @config << config_text( 'solution.rb' )
     @config.rewind
-    expect( Solutions.list( '/tmp' )).must_equal ['solution.rb']
+    expect( Solutions.choose_if_many( '/tmp' )).must_equal ['solution.rb']
   end
 
-  it '#list with two solutions' do
-    @config << config_text( 'solution.rb', 'solution1.rb' )
-    @config.rewind
-    expect( Solutions.list( '/tmp' )).must_equal ['solution.rb', 'solution1.rb']
+  it '#choose_if_many with two solutions' do
+    stub_return = ->( solutions ) { solutions }
+    Solutions.stub( :solution_chooser, stub_return ) do
+      @config << config_text( 'solution.rb', 'solution1.rb' )
+      @config.rewind
+      expect( Solutions.choose_if_many( '/tmp' )).must_equal ['solution.rb', 'solution1.rb']
+    end
   end
 end

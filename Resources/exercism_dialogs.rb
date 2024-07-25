@@ -65,17 +65,6 @@ module ExercismDialogs
     ]
   end
 
-  def solution_chooser( solutions )
-    DialogBuilder
-      .display_chooser_with(
-        items: solutions,
-        prompt: 'Choose one or more solutions to submit',
-        multiselect: true
-      )
-      .chomp
-      .split ', '
-  end
-
   def display_clipboard_error
     DialogBuilder.display_dialog_with(
       title: 'Exercism Command Not Found',
