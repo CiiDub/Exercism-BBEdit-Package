@@ -61,16 +61,10 @@ module Exercism
     display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
     dir = exercism_dir CURRENT_DIR
-    solutions = -> {
-      solution = Solutions.list dir
-      return solution if solution.size == 1
-
-      solution_chooser solutions
-    }
     save_doc if Settings.autosave_on_submit?
     message, status =
       Dir.chdir( dir ) do
-        Open3.capture2e 'exercism', 'submit', solutions.call.shelljoin
+        Open3.capture2e 'exercism', 'submit', Solutions.choose_if_many( dir ).shelljoin
       end
     display_upload_error( BBEditStyleLogWriter.clean_whitespace( message )) unless status.success?
 
