@@ -14,13 +14,13 @@ module Solutions
     solution_chooser solutions
   end
 
-  private
-
   def list( exercise_dir )
     JSON
       .load_file( File.join( exercise_dir, '.exercism', CONFIG_FILE ))
       .dig 'files', 'solution'
   end
+
+  private
 
   def solution_chooser( solutions )
     DialogBuilder
