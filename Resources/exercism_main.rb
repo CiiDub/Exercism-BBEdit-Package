@@ -1,8 +1,7 @@
-require 'open3'
-require 'shellwords'
 require_relative 'exercism_dialogs'
 require_relative 'exercism_download'
 require_relative 'exercism_workspace'
+require_relative 'exercism_cli'
 require_relative 'log_writer'
 require_relative 'solutions'
 require_relative 'package_settings'
@@ -13,6 +12,7 @@ require_relative 'package_settings'
 # Module for integrating BBEdit with the educational website exercism.org and it's commandline tool.
 module Exercism
   extend self
+  extend ExercismCLICalls
   extend ExercismWorkspaceAndExercises
   extend ExercismDialogs
   extend ExercismDownload
@@ -43,7 +43,7 @@ module Exercism
   def open_current_exercise
     display_outside_workspace_error( DOC, WORKSPACE ) unless workspace?
 
-    system 'exercism', 'open', exercism_dir( CURRENT_DIR )
+    call_open exercism_dir( CURRENT_DIR )
   end
 
   def test_current_exercise
@@ -51,7 +51,7 @@ module Exercism
 
     dir = exercism_dir CURRENT_DIR
     save_doc if Settings.autosave_on_test?
-    message, status = Dir.chdir( dir ) { Open3.capture2e 'exercism', 'test' }
+    message, status = call_test( dir )
     tag_name = Settings.tag_on_test
     tag_exercise( status.success?, tag_name, dir ) if tag_name
     BBEditStyleLogWriter.write dir, Solutions.list( dir ).first, message
@@ -62,10 +62,7 @@ module Exercism
 
     dir = exercism_dir CURRENT_DIR
     save_doc if Settings.autosave_on_submit?
-    message, status =
-      Dir.chdir( dir ) do
-        Open3.capture2e 'exercism', 'submit', Solutions.choose_if_many( dir ).shelljoin
-      end
+    message, status = call_submit( dir )
     display_upload_error( BBEditStyleLogWriter.clean_whitespace( message )) unless status.success?
 
     BBEditStyleLogWriter.write dir, DOC, message
