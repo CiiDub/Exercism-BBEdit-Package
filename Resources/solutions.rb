@@ -1,5 +1,5 @@
 require 'json'
-require_relative 'exercism_dialogs'
+require_relative 'dialog_builder'
 
 # A little class to grave the solutions for an exercise from .exercism/config.json
 module Solutions
