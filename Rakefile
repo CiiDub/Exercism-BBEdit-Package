@@ -1,3 +1,5 @@
+require_relative 'Test/view_dialogs'
+
 TITLE        = 'Exercism BBEdit Package'.freeze
 PACKAGE_NAME = "#{TITLE}.bbpackage".freeze
 PACKAGE      = File.expand_path "~/Library/Application Support/BBEdit/Packages/#{PACKAGE_NAME}".freeze
@@ -134,5 +136,12 @@ namespace 'settings' do
     set_it 'AutoSaveOnTest', on_off
     status = on_off.to_i.zero? ? 'off' : 'on'
     print_dash_header "Autosave on Test is #{status}."
+  end
+end
+
+namespace 'tests' do
+  desc 'Select and view dialog boxes in the package.'
+  task :view_dialogs do
+    DialogViewer.select
   end
 end

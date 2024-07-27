@@ -25,11 +25,12 @@ module ExercismDialogs
     )
 
     answer_regex = /Exercise (?<exercise>[\w ]+) in track (?<track>[\w ]+)/
-    [
+    return [
       answer_regex
         .match( chosen_exercise ).named_captures
-        .trasfrom_values { | value | value.downcase.gsub( ' ', '-' ) }
-    ]
+        .transform_values { | value | value.downcase.gsub( ' ', '-' ) }
+    ] unless chosen_exercise.chomp == 'false'
+    exit 0
   end
 
   def display_clipboard_error
