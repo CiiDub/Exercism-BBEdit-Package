@@ -23,12 +23,13 @@ module ExercismDialogs
       items: exercise_selections,
       prompt: 'Which Exercise would you like to download?'
     )
+    exit 0 if chosen_exercise.chomp == 'false'
 
     answer_regex = /Exercise (?<exercise>[\w ]+) in track (?<track>[\w ]+)/
     [
       answer_regex
         .match( chosen_exercise ).named_captures
-        .trasfrom_values { | value | value.downcase.gsub( ' ', '-' ) }
+        .transform_values { | value | value.downcase.gsub( ' ', '-' ) }
     ]
   end
 
