@@ -23,14 +23,14 @@ module ExercismDialogs
       items: exercise_selections,
       prompt: 'Which Exercise would you like to download?'
     )
+    exit 0 if chosen_exercise.chomp == 'false'
 
     answer_regex = /Exercise (?<exercise>[\w ]+) in track (?<track>[\w ]+)/
-    return [
+    [
       answer_regex
         .match( chosen_exercise ).named_captures
         .transform_values { | value | value.downcase.gsub( ' ', '-' ) }
-    ] unless chosen_exercise.chomp == 'false'
-    exit 0
+    ]
   end
 
   def display_clipboard_error
