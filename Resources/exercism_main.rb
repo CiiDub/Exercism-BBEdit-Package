@@ -36,7 +36,7 @@ module Exercism
     track_exercise_hashes  = make_track_exercise_hash urls, download_regex_pattern
     display_webpage_error if track_exercise_hashes.compact.empty?
 
-    track_exercise_hash = track_exercise_hashes.empty? ? exercise_chooser( track_exercise_hashes )[0] : track_exercise_hashes[0]
+    track_exercise_hash = track_exercise_hashes.size > 1 ? exercise_chooser( track_exercise_hashes )[0] : track_exercise_hashes[0]
     confirm_and_download WORKSPACE, track_exercise_hash
   end
 
