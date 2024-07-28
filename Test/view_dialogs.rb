@@ -13,7 +13,6 @@ module DialogViewer
   extend self
 
   def select
-#     ExercismDialogs.include ChangesForTests::ExercismDialogs::NoExit
     selection = dialog_chooser
     dialogs = activate_dialogs selection
     dialogs.call unless @multi_select
@@ -59,11 +58,12 @@ module DialogViewer
     dialogs.default_proc = proc do | dialogs_h, key |
       @multi_select = true
       if key == :'All Dialogs'
-        return dialogs_h.each_value do | dialog |
+        dialogs_h.each_value do | dialog |
           dialog.call
         rescue SystemExit
           next
         end
+        return
       end
 
       multi_select = key.to_s.gsub( ', ', ' ' ).sub( 'All Dialogs', '' ).strip.split.map( &:to_sym )
@@ -77,5 +77,3 @@ module DialogViewer
     dialogs[choices]
   end
 end
-
-DialogViewer.select
