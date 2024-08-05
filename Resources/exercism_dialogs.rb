@@ -71,6 +71,16 @@ module ExercismDialogs
     exit 0
   end
 
+  def display_upload_error( message )
+    DialogBuilder.display_dialog_with(
+      title: 'Error Submiting',
+      message: 'Your submition did not upload.\n\n' + message,
+      buttons: ['OK'],
+      highlighted_button: 1
+    )
+    exit 0
+  end
+
   def display_download_confirmation( track, exercise )
     DialogBuilder.display_dialog_with(
       title: 'Confirm Exercism Track and Exercise',
@@ -87,16 +97,6 @@ module ExercismDialogs
       buttons: ['Cancel', 'Open', 'Overwrite'],
       highlighted_button: 2
     )
-  end
-
-  def display_upload_error( message )
-    DialogBuilder.display_dialog_with(
-      title: 'Error Submiting',
-      message: 'Your submition did not upload.\n\n' + message,
-      buttons: ['OK'],
-      highlighted_button: 1
-    )
-    exit 0
   end
 end
 # rubocop:enable Style::StringLiterals
