@@ -364,6 +364,26 @@ describe 'Exercism *current exercise* methods' do
       is_an_exercise
       successful_submission
 
+      expect( subject.submit_current_exercise ).must_equal 'Submission Successful'
+    end
+
+    it 'fail submission with autosave' do
+      is_an_exercise
+      failed_submission
+      auto_save
+
+      error = expect { subject.submit_current_exercise }.must_raise StandardError
+      value( error.message ).must_equal 'Submission Failed'
+      expect( subject.saved? ).must_equal true
+    end
+
+    it 'successful submission with autosave' do
+      is_an_exercise
+      successful_submission
+      auto_save
+
+      expect( subject.submit_current_exercise ).must_equal 'Submission Successful'
+      expect( subject.saved? ).must_equal true
     end
   end
 end
