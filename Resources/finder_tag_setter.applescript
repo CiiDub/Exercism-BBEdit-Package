@@ -47,6 +47,7 @@ on run argv
 	if theCmd = "success" then my addTags:{theTag} forPath:(POSIX path of theFile)
 	-- Crude way of getting the project window to update
 	-- When test results pop up it returns to BBEdit.
-	tell application "Finder" to activate 
+	tell application "Finder" to activate
+	tell application "BBEdit" to activate
 end run
 
