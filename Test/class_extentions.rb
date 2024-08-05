@@ -128,10 +128,6 @@ module TestFakes
       def call_submit( _ex_dir )
         [@fake_message, Status.new( @fake_status )]
       end
-
-#       def open_current_exercise
-#         nil
-#       end
     end
   end
 end

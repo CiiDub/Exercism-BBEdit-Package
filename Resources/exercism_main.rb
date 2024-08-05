@@ -54,7 +54,7 @@ module Exercism
     message, status = call_test( dir )
     tag_name = Settings.tag_on_test
     tag_exercise( status.success?, tag_name, dir ) if tag_name
-    BBEditStyleLogWriter.write dir, Solutions.list( dir ).first, message
+    BBEditStyleLogWriter.write( dir, Solutions.list( dir ).first, message )
   end
 
   def submit_current_exercise
@@ -66,6 +66,6 @@ module Exercism
     display_upload_error( BBEditStyleLogWriter.clean_whitespace( message )) unless status.success?
 
     open_current_exercise
-    BBEditStyleLogWriter.clean_whitespace( message )
+    BBEditStyleLogWriter.clean_whitespace message
   end
 end
