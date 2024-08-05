@@ -17,8 +17,8 @@ module Exercism
   extend ExercismDialogs
   extend ExercismDownload
 
-  WORKSPACE    = `exercism workspace`.chomp.freeze
   DOC          = ENV['BB_DOC_NAME'].freeze
+  WORKSPACE    = `exercism workspace`.chomp.freeze
   CURRENT_DIR  = ENV['BB_DOC_PATH'].gsub( DOC, '' ).freeze
 
   def download_exercise_with_clipboard
@@ -65,7 +65,7 @@ module Exercism
     message, status = call_submit( dir )
     display_upload_error( BBEditStyleLogWriter.clean_whitespace( message )) unless status.success?
 
-    BBEditStyleLogWriter.write dir, DOC, message
     open_current_exercise
+    BBEditStyleLogWriter.clean_whitespace( message )
   end
 end
