@@ -3,6 +3,8 @@ module ExercismWorkspaceAndExercises
   private
 
   def workspace?( cur_dir = Exercism::CURRENT_DIR, workspace = Exercism::WORKSPACE )
+    return false if cur_dir.nil?
+
     cur_dir.start_with? workspace
   end
 

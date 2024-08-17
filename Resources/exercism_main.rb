@@ -19,7 +19,7 @@ module Exercism
 
   DOC          = ENV['BB_DOC_NAME'].freeze
   WORKSPACE    = `exercism workspace`.chomp.freeze
-  CURRENT_DIR  = ENV['BB_DOC_PATH'].gsub( DOC, '' ).freeze
+  CURRENT_DIR  = ENV['BB_DOC_PATH']&.gsub( DOC, '' ).freeze
 
   def download_exercise_with_clipboard
     clipboard_regex_pattern = /exercism download --track=(?<track>[\w-]+) --exercise=(?<exercise>[\w-]+)/
