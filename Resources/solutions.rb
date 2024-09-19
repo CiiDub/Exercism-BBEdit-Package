@@ -1,7 +1,7 @@
 require 'json'
 require_relative 'dialog_builder'
 
-# A little class to grave the solutions for an exercise from .exercism/config.json
+# A module to retrieve the solution -the exercise file or files that hold the solution- from .exercism/config.json for open exercise.
 module Solutions
   extend self
 
