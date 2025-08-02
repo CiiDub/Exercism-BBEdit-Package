@@ -1,3 +1,4 @@
+require 'rake/testtask'
 require_relative 'Test/view_dialogs'
 
 TITLE        = 'Exercism BBEdit Package'.freeze
@@ -140,8 +141,23 @@ namespace 'settings' do
 end
 
 namespace 'tests' do
-  desc 'Select and view dialog boxes in the package.'
+  desc 'Select and view design of dialog boxes in the package.'
   task :view_dialogs do
     DialogViewer.select
   end
+  
+  Rake::TestTask.new(:unit) do | task |
+  	task.description = 'Run Unit Tests'
+		task.pattern = 'Test/unit_test_*.rb'
+	end
+	
+	Rake::TestTask.new(:integration) do | task |
+		task.description = 'Run Integration Tests -BBEdit will be brought to front-'
+		task.pattern = 'Test/test_*.rb'
+	end
+end
+
+task :test do
+	p 'This is running the Rake task tests:unit'
+	Rake::Task['tests:unit'].invoke
 end
