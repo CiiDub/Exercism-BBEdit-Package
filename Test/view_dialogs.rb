@@ -55,6 +55,7 @@ module DialogViewer
       solution_chooser: -> { AccessDialogs.send( :solution_chooser, ['one', 'two', 'three'] ) }
     }
 
+    # The 'rescue SystemExit' allows the cancel button to be pressed in dialog boxes without exiting the test.
     dialogs.default_proc = proc do | dialogs_h, key |
       @multi_select = true
       if key == :'All Dialogs'
@@ -77,3 +78,4 @@ module DialogViewer
     dialogs[choices]
   end
 end
+
