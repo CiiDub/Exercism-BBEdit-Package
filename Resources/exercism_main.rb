@@ -6,7 +6,7 @@ require_relative 'log_writer'
 require_relative 'solutions'
 require_relative 'package_settings'
 
-# NOTE: Methods "BBEditStyleLogWriter.write" and "ExercismDownload#open_downloaded" use the shell cmd "open -a <app> <file>" rather then the "bbedit <file>" command.
+# NOTE: Methods "BBEditStyleLogWriter#write" and "ExercismDownload#open_downloaded" use the shell cmd "open -a <app> <file>" rather than the "bbedit <file>" command.
 # This is because you have to install BBEdits commandline tools explicitly, and some folks (expecially/probably novices) might not.
 
 # Module for integrating BBEdit with the educational website exercism.org and it's commandline tool.
