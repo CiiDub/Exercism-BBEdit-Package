@@ -2,6 +2,9 @@ require 'minitest/autorun'
 require 'open3'
 require_relative '../Resources/exercism_main'
 require_relative 'class_extentions'
+# Ensures tests run from test directory instead of project root.
+Dir.chdir( 'Test/' ) unless Dir.pwd.match?( /Test\/?$/ )
+puts "****** BBEdit will jump around a little, it's cool ;) ******"
 
 describe 'Exercism Download Methods' do
   before do
@@ -16,11 +19,11 @@ describe 'Exercism Download Methods' do
 
     before do
       @old_clipboard, _status = Open3.capture2e 'pbpaste'
-      system 'pbcopy', '</dev/null'
+      Open3.pipeline ['echo', ''], 'pbcopy' 
     end
 
     after do
-      system 'pbcopy', @old_clipboard
+    	Open3.pipeline ['echo', @old_clipboard], 'pbcopy' 
     end
 
     let( :copy_valid_command ) { Open3.pipeline ['echo', 'exercism download --track=ruby --exercise=fake-exercise'], 'pbcopy' }
