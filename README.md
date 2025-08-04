@@ -33,22 +33,22 @@ This is a package to intrigate BBEdit with the Exercism website and command line
 This will create a BBEdit package in `'~/Library/Application Support/BBEdit/Packages'`, after which the five commands will be available under the submenu __Exercism__ in the script menu. You might need to restart BBEdit.
 
 > __✍︎ A Note About ZSH and Rake__
-
+>
 > ZSH's globing behavior messes with Rake's bracket syntax for receiving arguments. I recommend adding this alias to your `.zprofile` or `.zshrc` file.
 >
 > ```
 > alias rake="noglob rake"
 > ```
-
+>
 > You might also set the `NOMATCH` zsh option as the folks at Thoughbots did,
 [How To Use Arguments In a Rake Task](https://thoughtbot.com/blog/how-to-use-arguments-in-a-rake-task). Otherwise you will have to wrap all of rakes command arguments in quotes or escape globbing characters. This doesn’t effect the installation of the package but does effect the configuration commands.
-
+>
 > __Little more about ZSH expansion, globbing and rake arguments__
-
+>
 > [4 Ways to Pass Arguments to a Rake Task](https://www.seancdavis.com/posts/4-ways-to-pass-arguments-to-a-rake-task/)
-
+>
 > [ZSH Globbing as an Alternative to Find Command](https://dmitry-antonyuk.medium.com/zsh-globbing-as-an-alternative-to-find-command-2ebf9da5cffe)
-
+>
 > [A Guide to Zsh Expansion with Examples](https://thevaluable.dev/zsh-expansion-guide-example/)
 
 
