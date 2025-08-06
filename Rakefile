@@ -117,7 +117,7 @@ namespace 'settings' do
 
   desc 'Set option to tag the exercise directory, with the provided tag name, when exercise tests are successful'
   task :tag_on_test, [:tag_name] do | _task, args |
-    tag_name = args[:tag_name] == 'false' || args[:tag_name].nil? ? '' : args[:tag_name]
+    tag_name = args[:tag_name] == 'off' || args[:tag_name].nil? ? '' : args[:tag_name]
     set_it 'TagOnTest', tag_name
     status = tag_name.empty? ? 'off' : "on and set to '#{tag_name}'"
     print_dash_header "Tag exercise on test is #{status}"
@@ -125,7 +125,7 @@ namespace 'settings' do
 
   desc 'Set option to autosave open solution before submiting.'
   task :autosave_on_submit, [:on_off] do | _task, args |
-    on_off = args[:on_off].match?( /true|1|on/ ) ? '1' : 0
+    on_off = String(args[:on_off]).match?( /true|1|on/ ) ? '1' : 0
     set_it 'AutoSaveOnSubmit', on_off
     status = on_off.to_i.zero? ? 'off' : 'on'
     print_dash_header "Autosave on submit is #{status}."
@@ -133,7 +133,7 @@ namespace 'settings' do
 
   desc 'Set option to autosave open solution before testing.'
   task :autosave_on_test, [:on_off] do | _task, args |
-    on_off = args[:on_off].match?( /true|1|on/ ) ? '1' : 0
+    on_off = String(args[:on_off]).match?( /true|1|on/ ) ? '1' : 0
     set_it 'AutoSaveOnTest', on_off
     status = on_off.to_i.zero? ? 'off' : 'on'
     print_dash_header "Autosave on Test is #{status}."
