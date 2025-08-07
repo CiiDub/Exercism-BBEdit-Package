@@ -6,6 +6,8 @@
 
 This is a package to intrigate BBEdit with the Exercism website and command line tool.
 
+![Screenshot of BBedit with a Exercism project open and the commands displayed.](screenshot.png)
+
 ## Requirements
 
 - BBEdit, I’ve only test this on version 15.x.x but I suspect older versions will work as well.
@@ -96,7 +98,7 @@ __The Commands__
 	This will run an exercises’ test and present the results. I try to display the result in a BBEdit kind of way, as an open log file. I’m imitating the behavior of the `Run` command from the shebang `#!` menu.
 	
 	> __✍︎ Key Customization__
-	> : `#! > Run` has a key command set to `⌘R` by defualt in BBEdit. I set `⌃R` to envoke this command. The easiest way to do this is with BBEdit's Script Pallete.
+	> : `#! > Run` has a key command set to `⌘R` by defualt in BBEdit. I set `⌃R` to envoke this command. The easiest way to do this is with BBEdit's script pallete.
 
 - ⇡✌︎ Submit This Exercise
 	
@@ -104,11 +106,39 @@ __The Commands__
 	
 ## Configuration
 
-@
+This package provides three setting options. They are accessible through the `rake` command. If you run `rake -T` you will see a list of all the commands available for this project, but here is are the ones related to settings.
 
-@
+```
+rake settings:autosave_on_submit[on_off]
+rake settings:autosave_on_test[on_off]
+rake settings:tag_on_test[tag_name]
+```
 
-@
+So passing “on” to the two autosave commands will save the open exercise file when you run `⇡✌︎ Submit This Exercise` and `⚖︎ Test This Exercise` respectively.
+
+It will look like this in the terminal.
+
+```
+$ rake settings:autosave_on_submit[on]
+-------------------------
+Autosave on submit is on.
+-------------------------
+
+$ rake settings:autosave_on_test[on]
+-----------------------
+Autosave on Test is on.
+-----------------------
+```
+
+Using `tag_on_test` is a little different. The tags in question are [Finder tags](https://support.apple.com/guide/mac-help/tag-files-and-folders-mchlp15236/mac) which can also be seen in BBEdit project windows file browser.
+
+To use this feature you need to create a tag in the Finder, with a color of your choice and name it something like “Done” or “Passed”. You do this in the Finder’s settings.
+
+Then in the terminal `rake settings:tag_on_test[Pass]`.
+
+Now when your exercise passes it’s test it will tag it’s folder appropriately.
+
+Passing “off” to any of these rake tasks will deactivate them.
 
 > __✍︎ About ZSH and Rake__
 >
