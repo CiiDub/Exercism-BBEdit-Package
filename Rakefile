@@ -102,6 +102,9 @@ task install: PACKAGE do
   print_updates( updated_files + updated_dirs, deleted_items )
 end
 
+desc "Updates changed files in installed #{TITLE}."
+task :update => :install
+
 desc "Removes #{TITLE} from BBEdit."
 task :uninstall do
   rm_rf PACKAGE, verbose: false
