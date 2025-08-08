@@ -157,3 +157,41 @@ Passing “off” to any of these rake tasks will deactivate them.
 > [ZSH Globbing as an Alternative to Find Command](https://dmitry-antonyuk.medium.com/zsh-globbing-as-an-alternative-to-find-command-2ebf9da5cffe)
 >
 > [A Guide to ZSH Expansion with Examples](https://thevaluable.dev/zsh-expansion-guide-example/)
+
+## How I use BBEdit with Exercism
+
+When you install the Exercism tools on your system it will create a folder in your home directory. It’s the Exercism workspace.
+
+I made a BBEdit project with the workspace as it’s root.
+
+__You might not want this package__
+
+Every project has a [Unix Worksheet](https://www.barebones.com/products/bbedit/benefitsintegrate.html#worksheet). It’s a text document married with a terminal shell. Type a shell command, control return on that line, then see the results on proceeding lines.
+
+Because it’s a text document you can leave common commands in place then just cd in to different tracks and exercises.
+
+You might have a unix worksheet like this attached to your Exercism project.
+
+```
+cd ~/Exercism/ruby/darts; pwd;
+/Users/chris/Exercism/ruby/darts
+
+exercism open
+
+exercism submit
+
+exercism test
+Running tests via `ruby darts_test.rb`
+
+Run options: --seed 2115
+
+# Running:
+
+.............
+
+Finished in 0.000632s, 20569.6152 runs/s, 20569.6152 assertions/s.
+
+13 runs, 13 assertions, 0 failures, 0 errors, 0 skips
+```
+
+It’s a very flexible way to work.
