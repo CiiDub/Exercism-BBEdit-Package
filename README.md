@@ -6,6 +6,8 @@
 
 This is a package to intrigate BBEdit with the Exercism website and command line tool.
 
+I’m in no way affiliated with Bare Bones or Exercism. I just did this for fun.
+
 ![Screenshot of BBedit with a Exercism project open and the commands displayed.](screenshot.png)
 
 ## Requirements
