@@ -8,7 +8,7 @@ This is a package to intrigate BBEdit with the Exercism website and command line
 
 I’m in no way affiliated with Bare Bones or Exercism. I just did this for fun.
 
-![Screenshot of BBedit with a Exercism project open and the commands displayed.](screenshot.png)
+![Screenshot of BBedit with a Exercism project open and the commands displayed.](screenshot.jpg)
 
 ## Requirements
 
@@ -42,7 +42,7 @@ This will create a BBEdit package in `'~/Library/Application Support/BBEdit/Pack
 > ⎚ Open Exercise in Browser
 > 
 > ---
-> ⇣✍ Download Exercise with Clipboard
+> ⇣✍︎ Download Exercise with Clipboard
 > 
 > ⇣⎙ Download Exercise with Browser
 > 
