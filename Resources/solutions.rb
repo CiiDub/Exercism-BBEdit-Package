@@ -15,8 +15,9 @@ module Solutions
   end
 
   def list( exercise_dir )
+    config_string = File.read( File.join( exercise_dir, '.exercism', CONFIG_FILE ))
     JSON
-      .load_file( File.join( exercise_dir, '.exercism', CONFIG_FILE ))
+      .parse( config_string )
       .dig 'files', 'solution'
   end
 
