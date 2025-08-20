@@ -43,8 +43,8 @@ code {
 	display: inline-flex;
 	color: var(--fg-bright);
 	background-color: var(--hightlight);
-	border: 1px solid var(--hightlight);
-	padding: 0px 6px 0px 6px;
+	border: 1px solid var(--bg);
+	padding: 0 6px 0 6px;
 	border-radius: 5px;
 }
 
@@ -54,6 +54,7 @@ pre code {
 	background-color: white;
 	padding: 15px;
 	border-radius: var(--corner-radius);
+	border-color: var(--hightlight);
 	text-wrap-mode: wrap;
 	font-family: 'Courier New', monospace;
 }
@@ -170,8 +171,15 @@ tbody tr td {
 	fill: var(--caution-title);
 }
 
-/* Code Highlighting Exported from Rouge::Themes::IgorPro (slightly modified) in Rouge Gem */
+.info-box.advanced code, .info-box.caution code {
+	border-color: var(--info-background);
+}
 
+.info-box.advanced pre code, .info-box.caution pre code {
+	border-color: var(--hightlight);
+}
+
+/* Code Highlighting Exported from Rouge::Themes::IgorPro (slightly modified) in Rouge Gem */
 
 .highlight table td { padding: 5px; }
 .highlight table pre { margin: 0; }
