@@ -137,43 +137,49 @@ Now when your exercise passes it’s test it will tag it’s folder appropriatel
 Passing “off” to any of these rake tasks will deactivate them.
 
 > [!NOTE]
-> _About ZSH and Rake_ ZSH's globing behavior messes with Rake's bracket syntax for receiving arguments. I recommend adding `alias rake="noglob rake"` to your `.zprofile` or `.zshrc` file. You might also set the `NOMATCH` zsh option as the folks at [Thoughbots](https://thoughtbot.com/blog/how-to-use-arguments-in-a-rake-task) did. Otherwise you will have to wrap all of rakes command arguments in quotes or escape globbing characters. This doesn’t effect the installation of the package but does effect the configuration commands.</br> [4 Ways to Pass Arguments to a Rake Task](https://www.seancdavis.com/posts/4-ways-to-pass-arguments-to-a-rake-task/)<br>[ZSH Globbing as an Alternative to Find Command](https://dmitry-antonyuk.medium.com/zsh-globbing-as-an-alternative-to-find-command-2ebf9da5cffe)</br>[A Guide to ZSH Expansion with Examples](https://thevaluable.dev/zsh-expansion-guide-example/)
+> _About ZSH and Rake:_ ZSH's globing behavior messes with Rake's bracket syntax for receiving arguments. I recommend adding `alias rake="noglob rake"` to your `.zprofile` or `.zshrc` file. You might also set the `NOMATCH` zsh option as the folks at [Thoughbots](https://thoughtbot.com/blog/how-to-use-arguments-in-a-rake-task) did.
+> 
+> Otherwise you will have to wrap all of rakes command arguments in quotes or escape globbing characters. This doesn’t effect the installation of the package but does effect the configuration commands.
+> 
+> __Some references about Rake, ZSH and Globbing__  
+> [4 Ways to Pass Arguments to a Rake Task](https://www.seancdavis.com/posts/4-ways-to-pass-arguments-to-a-rake-task/)<br>[ZSH Globbing as an Alternative to Find Command](https://dmitry-antonyuk.medium.com/zsh-globbing-as-an-alternative-to-find-command-2ebf9da5cffe)</br>[A Guide to ZSH Expansion with Examples](https://thevaluable.dev/zsh-expansion-guide-example/)
 
-## How I use BBEdit with Exercism
-
-When you install the Exercism tools on your system it will create a folder in your home directory. It’s the Exercism workspace.
-
-I made a BBEdit project with the workspace as it’s root.
-
-__You might not want this package__
-
-Every project has a [Unix Worksheet](https://www.barebones.com/products/bbedit/benefitsintegrate.html#worksheet). It’s a text document married with a terminal shell. Type a shell command, control return on that line, then see the results on proceeding lines.
-
-Because it’s a text document you can leave common commands in place then just cd in to different tracks and exercises.
-
-You might have a unix worksheet like this attached to your Exercism project.
-
-```
-cd ~/Exercism/ruby/darts; pwd;
-/Users/chris/Exercism/ruby/darts
-
-exercism open
-
-exercism submit
-
-exercism test
-Running tests via `ruby darts_test.rb`
-
-Run options: --seed 2115
-
-# Running:
-
-.............
-
-Finished in 0.000632s, 20569.6152 runs/s, 20569.6152 assertions/s.
-
-13 runs, 13 assertions, 0 failures, 0 errors, 0 skips
-```
-
-It’s a very flexible way to work.
+> [!TIP]
+> ###### How I use BBEdit with Exercism
+> 
+> When you install the Exercism tools on your system it will create a folder in your home directory. It’s the Exercism workspace.
+> 
+> I made a BBEdit project with the workspace as it’s root.
+> 
+> ###### You might not want this package_
+> 
+> Every project has a [Unix Worksheet](https://www.barebones.com/products/bbedit/benefitsintegrate.html#worksheet). It’s a text document married with a terminal shell. Type a shell command, control return on that line, then see the results on proceeding lines.
+> 
+> Because it’s a text document you can leave common commands in place then just cd in to different tracks and exercises.
+> 
+> You might have a unix worksheet like this attached to your Exercism project.
+> 
+> ```
+> cd ~/Exercism/ruby/darts; pwd;
+> /Users/chris/Exercism/ruby/darts
+> 
+> exercism open
+> 
+> exercism submit
+> 
+> exercism test
+> Running tests via `ruby darts_test.rb`
+> 
+> Run options: --seed 2115
+> 
+> # Running:
+> 
+> .............
+> 
+> Finished in 0.000632s, 20569.6152 runs/s, 20569.6152 assertions/s.
+> 
+> 13 runs, 13 assertions, 0 failures, 0 errors, 0 skips
+> ```
+> 
+> It’s a very flexible way to work.
 
