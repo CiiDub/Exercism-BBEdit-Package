@@ -144,6 +144,29 @@ Passing “off” to any of these rake tasks will deactivate them.
 > __Some references about Rake, ZSH and Globbing__  
 > [4 Ways to Pass Arguments to a Rake Task](https://www.seancdavis.com/posts/4-ways-to-pass-arguments-to-a-rake-task/)<br>[ZSH Globbing as an Alternative to Find Command](https://dmitry-antonyuk.medium.com/zsh-globbing-as-an-alternative-to-find-command-2ebf9da5cffe)</br>[A Guide to ZSH Expansion with Examples](https://thevaluable.dev/zsh-expansion-guide-example/)
 
+## Bonus Feature: Exercism markdown rendering
+
+BBEdit’s `Markup > Preview in BBEdit` command will preview the selected file, including markdown files. It works great with vanilla markdown but not so well with markdown that have unique [specifications](https://exercism.org/docs/building/markdown/markdown#h-special-blocks-sometimes-called-admonitions). It also will not render code blocks with code highlighting.
+
+BBEdit allows you to apply unique styles and filters from the preview window. I’ve provided a filter and a style to use with Exercism style markdown, such as the ReadMe.md that provide instructions for every exercise.
+
+![Style and Filter selections in BBEdit preview window.](style_filter.jpg)
+
+- The `exercism_filter.rb` renders Exercism markdown with ‘Special Blocks’ and code highlighting.
+
+- The `exercism_doc_styles.css` makes it look nice and similar (not exactly) to the Exercism.org website. 
+
+### Requirements
+
+This feature requires that you install two ruby gems. In your terminal use these commands.
+
+1. `$ gem install redcarpet`  
+	_If it’s not installed nothing will render when `exercism-filter.rb` is selected._
+
+2. `$ gem install rouge`  
+	_Only required for syntax highlighting in code blocks._
+
+
 > [!TIP]
 > ###### How I use BBEdit with Exercism
 > 
