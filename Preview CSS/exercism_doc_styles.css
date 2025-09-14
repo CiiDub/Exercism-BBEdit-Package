@@ -24,6 +24,10 @@ body {
 	font-family: 'Avenir Light', sans-serif;
 }
 
+img {
+	max-width: 100%;
+}
+
 p {
 	color: var(--fg-muted);
 	margin: 0 0 12px 0;
