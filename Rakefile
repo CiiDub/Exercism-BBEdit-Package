@@ -160,7 +160,10 @@ namespace 'tests' do
 	end
 end
 
-task :test do
-	p 'This is running the Rake task tests:unit'
+desc 'Set option to autosave open solution before testing.'
+task :tests do
+	puts "****** Running Unit Tests ******"
 	Rake::Task['tests:unit'].invoke
+	puts "\n\n****** Running Integration Tests ******"
+	Rake::Task['tests:integration'].invoke
 end
