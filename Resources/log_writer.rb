@@ -14,7 +14,7 @@ module BBEditStyleLogWriter
 
   def clean_whitespace( str )
     str
-    	.gsub!( %r{^(.*?)\r(?!\n)}, '' )
+    	.gsub( %r{^(.*?)\r(?!\n)}, '' )
     	.split( "\n" )
     	.map( &:strip )
     	.reject( &:empty? )
