@@ -15,15 +15,15 @@ module ExercismDownload
 
     case confirmation
     when /Download/ then download_exercise( workspace, track, exercise )
-    when /Overwrite/ then download_exercise( workspace, track, exercise, force: true )
+    when /Overwrite/ then download_exercise( workspace, track, exercise, overwrite: true )
     when /Open/ then open_downloaded( workspace, track, exercise )
     else exit 0
     end
   end
 
-  def download_exercise( workspace, track, exercise, force: false )
-    overwrite = force ? '--force' : ''
-    message   = Open3.capture2e( 'exercism', 'download', overwrite, "--track=#{track}", "--exercise=#{exercise}" ).first
+  def download_exercise( workspace, track, exercise, overwrite: false )
+    force_flag = overwrite ? '--force' : ''
+    message   = call_download(track, exercise, force_flag).first
     display_download_error( BBEditStyleLogWriter.clean_whitespace( message )) unless /^Downloaded to/.match? message
 
     open_downloaded workspace, track, exercise

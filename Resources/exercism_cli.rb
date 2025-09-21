@@ -12,6 +12,10 @@ module ExercismCLICalls
   def call_test( dir )
     Dir.chdir( dir ) { Open3.capture2e 'exercism', 'test' }
   end
+  
+  def call_download(track, exercise, force_flag)
+  	Open3.capture2e( 'exercism', 'download', "#{force_flag}", "--track=#{track}", "--exercise=#{exercise}" )
+  end
 
   def call_submit( dir )
     Dir.chdir( dir ) do
