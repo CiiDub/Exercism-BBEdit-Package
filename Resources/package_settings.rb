@@ -1,6 +1,6 @@
 require 'open3'
 
-# Module for setting optionally behavior in this BBEdit package
+# Module for reading optional behavior from plist file
 module Settings
   extend self
 
