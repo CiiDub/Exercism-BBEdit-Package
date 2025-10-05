@@ -1,6 +1,6 @@
 require 'open3'
 
-# A helper class to build Applescrit dialog boxes.
+# A helper module to build Applescrit dialog boxes.
 module DialogBuilder
   extend self
 
