@@ -1,22 +1,17 @@
 require_relative 'dialog_builder'
-
-# Added String#mytitlecase for convenience.
-class String
-  def mytitlecase( delimiter = ' ' )
-    split( delimiter ).map( &:capitalize ).join( delimiter )
-  end
-end
-
+require_relative 'devils_playground'
 # Weird Applescript string stuff. Beware, thar be dragons!
 # rubocop:disable Style::StringLiterals
 
 # Dialog Boxes for use with the Exercism module.
-module ExercismDialogs
+module ExercismDialogs    
+  using StringExtentions
+  
   private
 
   def exercise_chooser( exercises )
     exercise_selections = exercises.map do | exercise |
-      "Exercise #{exercise['exercise'].gsub( /[-_]/, ' ' ).mytitlecase} in track #{exercise['track'].gsub( /[-_]/, ' ' ).mytitlecase}"
+      "Exercise #{exercise['exercise'].gsub( /[-_]/, ' ' ).titlecase} in track #{exercise['track'].gsub( /[-_]/, ' ' ).titlecase}"
     end
 
     chosen_exercise = DialogBuilder.display_chooser_with(
@@ -84,7 +79,7 @@ module ExercismDialogs
   def display_download_confirmation( track, exercise )
     DialogBuilder.display_dialog_with(
       title: 'Confirm Exercism Track and Exercise',
-      message: "Download exercise \'#{exercise.gsub( /[-_]/, ' ' ).mytitlecase}\' from track \'#{track.gsub( /[-_]/, ' ' ).mytitlecase}?\'",
+      message: "Download exercise \'#{exercise.gsub( /[-_]/, ' ' ).titlecase}\' from track \'#{track.gsub( /[-_]/, ' ' ).titlecase}?\'",
       buttons: ['Cancel', 'Download'],
       highlighted_button: 2
     )
@@ -93,7 +88,7 @@ module ExercismDialogs
   def display_overwrite_confirmation( track, exercise )
     DialogBuilder.display_dialog_with(
       title: 'Exercism Track and Exercise Exists',
-      message: "Exercise \'#{exercise.gsub( /[-_]/, ' ' ).mytitlecase}\' from track \'#{track.gsub( /[-_]/, ' ' ).mytitlecase}\' has been downloaded.",
+      message: "Exercise \'#{exercise.gsub( /[-_]/, ' ' ).titlecase}\' from track \'#{track.gsub( /[-_]/, ' ' ).titlecase}\' has been downloaded.",
       buttons: ['Cancel', 'Open', 'Overwrite'],
       highlighted_button: 2
     )
