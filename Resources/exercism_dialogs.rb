@@ -5,7 +5,7 @@ require_relative 'devils_playground'
 
 # Dialog Boxes for use with the Exercism module.
 module ExercismDialogs    
-  using StringExtentions
+  using StringExtentions::TitleCase unless String.method_defined?(:titlecase)
   
   private
 
