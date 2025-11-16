@@ -13,15 +13,15 @@ module StringExtentions
 		refine String do
 			def titlecase
 				TitleCase.titlecase_with(self)
-				.then {TitleCase.titlecase_with(_1, '-')}
-				.then {TitleCase.titlecase_with(_1, '_')}
-				.then {TitleCase.titlecase_with(_1, '.')}
+				.then {TitleCase.titlecase_with( _1, '-' )}
+				.then {TitleCase.titlecase_with( _1, '_' )}
+				.then {TitleCase.titlecase_with( _1, '.' )}
 			end
 		end
 		
 		private
 		
-		def self.titlecase_with(str, delimiter = ' ' )
+		def self.titlecase_with( str, delimiter = ' ' )
 			str
 			.split( delimiter )
 			.map.with_index {|word, index| 
@@ -32,9 +32,9 @@ module StringExtentions
 			.join( delimiter )
 		end
 		
-		def self.capitalize?(word, index)
+		def self.capitalize?( word, index )
 			special_words = ARTICLES | PREPOSITIONS | CONJUNCTIONS
-			return false if special_words.include?(word) && index > 0 || /[A-Z]/.match?(word)
+			return false if special_words.include?( word ) && index > 0 || /[A-Z]/.match?(word)
 			
 			true
 		end
