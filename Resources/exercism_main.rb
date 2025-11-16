@@ -20,6 +20,12 @@ module Exercism
   DOC          = ENV['BB_DOC_NAME'].freeze
   WORKSPACE    = `exercism workspace`.chomp.freeze
   CURRENT_DIR  = ENV['BB_DOC_PATH']&.gsub( DOC, '' ).freeze
+  LOGMAKER     = BBEditStyleLogWriter.new do | current_dir, doc |
+    log   = File.basename doc, '.*'
+    dir   = File.dirname current_dir
+    track = File.basename dir
+    "{⏜⏝⏜} #{track} #{log}.log"
+  end
 
   def download_exercise_with_clipboard
     clipboard_regex_pattern = /exercism download --track=(?<track>[\w-]+) --exercise=(?<exercise>[\w-]+)/
@@ -54,7 +60,7 @@ module Exercism
     message, status = call_test( dir )
     tag_name = Settings.tag_on_test
     tag_exercise( status.success?, tag_name, dir ) if tag_name
-    BBEditStyleLogWriter.write( dir, Solutions.list( dir ).first, message )
+    LOGMAKER.write( dir, Solutions.list( dir ).first, message )
   end
 
   def submit_current_exercise
@@ -63,9 +69,9 @@ module Exercism
     dir = exercism_dir CURRENT_DIR
     save_doc if Settings.autosave_on_submit?
     message, status = call_submit( dir )
-    display_upload_error( BBEditStyleLogWriter.clean_whitespace( message )) unless status.success?
+    display_upload_error( LOGMAKER.clean_whitespace( message )) unless status.success?
 
     open_current_exercise
-    BBEditStyleLogWriter.clean_whitespace message
+    LOGMAKER.clean_whitespace message
   end
 end
