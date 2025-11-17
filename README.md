@@ -112,6 +112,9 @@ rake settings:tag_on_test[tag_name]
 
 So passing “on” to the two autosave commands will save the open exercise file when you run `⇡✌︎ Submit This Exercise` and `⚖︎ Test This Exercise` respectively.
 
+> [!NOTE]
+> Both autosave settings are on by default now.
+
 It will look like this in the terminal.
 
 ```

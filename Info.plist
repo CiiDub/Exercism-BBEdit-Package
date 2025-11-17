@@ -7,9 +7,9 @@
 		<key>TagOnTest</key>
 		<string></string>
 		<key>AutoSaveOnTest</key>
-		<integer>0</integer>
+		<integer>1</integer>
 		<key>AutoSaveOnSubmit</key>
-		<integer>0</integer>
+		<integer>1</integer>
 	</dict>
 </dict>
 </plist>
