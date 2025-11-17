@@ -19,11 +19,11 @@ describe 'Exercism Download Methods' do
 
     before do
       @old_clipboard, _status = Open3.capture2e 'pbpaste'
-      Open3.pipeline ['echo', ''], 'pbcopy' 
+      Open3.pipeline ['echo', ''], 'pbcopy'
     end
 
     after do
-    	Open3.pipeline ['echo', @old_clipboard], 'pbcopy' 
+      Open3.pipeline ['echo', @old_clipboard], 'pbcopy'
     end
 
     let( :copy_valid_command ) { Open3.pipeline ['echo', 'exercism download --track=ruby --exercise=fake-exercise'], 'pbcopy' }
