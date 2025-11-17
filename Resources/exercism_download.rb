@@ -23,7 +23,7 @@ module ExercismDownload
 
   def download_exercise( workspace, track, exercise, overwrite: false )
     force_flag = overwrite ? '--force' : ''
-    message   = call_download(track, exercise, force_flag).first
+    message    = call_download( track, exercise, force_flag ).first
     display_download_error( BBEditStyleLogWriter.clean_whitespace( message )) unless /^Downloaded to/.match? message
 
     open_downloaded workspace, track, exercise

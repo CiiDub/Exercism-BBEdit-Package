@@ -4,9 +4,9 @@ require_relative 'devils_playground'
 # rubocop:disable Style::StringLiterals
 
 # Dialog Boxes for use with the Exercism module.
-module ExercismDialogs    
-  using StringExtentions::TitleCase unless String.method_defined?(:titlecase)
-  
+module ExercismDialogs
+  using StringExtentions::TitleCase unless String.method_defined?( :titlecase )
+
   private
 
   def exercise_chooser( exercises )
