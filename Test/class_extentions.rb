@@ -2,9 +2,11 @@ module TestFakes
   module Exercism
     # Overides for Settings for tests
     module Settings
-      @save_on_test   = nil
-      @save_on_submit = nil
-      @test_tag       = nil
+      def self.extended( base )
+        base.instance_variable_set :@save_on_test, nil
+        base.instance_variable_set :@save_on_submit, nil
+        base.instance_variable_set :@test_tag, nil
+      end
 
       attr_writer :save_on_test, :save_on_submit, :test_tag
 
@@ -41,8 +43,10 @@ module TestFakes
 
     # Overides for testing Exercism#download_exercise_with_website
     module FromWebsite
-      @test_url = nil
-      @test_exercise_choice = nil
+      def self.extended( base )
+        base.instance_variable_set :@test_url, nil
+        base.instance_variable_set :@test_exercise_choice, nil
+      end
 
       attr_writer :test_url, :test_exercise_choice
 
@@ -76,9 +80,12 @@ module TestFakes
 
     # Overides for testing Exercism#test_current_exercise
     module TestExercise
-      @fake_status = nil
-      @fake_test_results = nil
-      @saved = nil
+      def self.extended( base )
+        base.instance_variable_set :@fake_status, nil
+        base.instance_variable_set :@fake_test_results, nil
+        base.instance_variable_set :@saved, nil
+      end
+
       Status = Struct.new( :success? )
 
       attr_writer :fake_status, :fake_test_results, :saved
@@ -102,9 +109,12 @@ module TestFakes
 
     # Overides for testing Exercism#submit_current_exercise
     module SubmitExercise
-      @fake_status = nil
-      @fake_message = nil
-      @saved = nil
+      def self.extended( base )
+        base.instance_variable_set :@fake_status, nil
+        base.instance_variable_set :@fake_test_results, nil
+        base.instance_variable_set :@saved, nil
+      end
+
       Status = Struct.new( :success? )
 
       attr_writer :fake_status, :fake_message, :saved
