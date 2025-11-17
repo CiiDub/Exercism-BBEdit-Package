@@ -26,22 +26,22 @@ directory PACKAGE do
   @new_install = true
 end
 
-def make_package_dir_structure( blessed_items )
+def make_package_dir_structure( blessed_items, install_dir: PACKAGE )
   updated_dirs = []
   blessed_items.each do | item |
     next unless File.directory? item
 
-    dir = File.join( PACKAGE, 'Contents', item )
+    dir = File.join( install_dir, 'Contents', item )
     updated_dirs << item unless Dir.exist? dir
     mkdir_p( dir, verbose: false )
   end
   updated_dirs
 end
 
-def update_install( files )
+def update_install( files, install_dir: PACKAGE )
   updated_files = []
   files.each do | file |
-    install_path = File.join( PACKAGE, 'Contents', file )
+    install_path = File.join( install_dir, 'Contents', file )
     next if uptodate? install_path, [file]
 
     # Only install info.plist once, don't overwrite installed version.
@@ -53,8 +53,8 @@ def update_install( files )
   updated_files
 end
 
-def remove_orphaned_items( project_items )
-  installed_path = File.join( PACKAGE, 'Contents' )
+def remove_orphaned_items( project_items, install_dir: PACKAGE )
+  installed_path = File.join( install_dir, 'Contents' )
   Dir.chdir( installed_path ) do
     installed_items = FileList.new( '**/*' ).reject { | item | project_items.include? item }
     orphaned_files  = installed_items.reject { | item | File.directory? item }
@@ -103,12 +103,23 @@ task install: PACKAGE do
 end
 
 desc "Updates changed files in installed #{TITLE}."
-task :update => :install
+task update: :install
 
 desc "Removes #{TITLE} from BBEdit."
 task :uninstall do
   rm_rf PACKAGE, verbose: false
   print_dash_header "'#{TITLE}' was removed from BBEdit"
+end
+
+desc "Makes a '#{PACKAGE_NAME}' in Packages directory."
+task :build do
+  build_path = File.join( 'Packages', PACKAGE_NAME )
+  blessed_items = FileList.new( '**/*' ).select { | file | blessed? file }
+  updated_dirs  = make_package_dir_structure( blessed_items, install_dir: build_path )
+  project_files = blessed_items.reject { | item | File.directory? item }
+  updated_files = update_install( project_files, install_dir: build_path )
+  deleted_items = remove_orphaned_items( blessed_items, install_dir: build_path )
+  print_updates( updated_files + updated_dirs, deleted_items )
 end
 
 namespace 'settings' do
@@ -128,7 +139,7 @@ namespace 'settings' do
 
   desc 'Set option to autosave open solution before submiting.'
   task :autosave_on_submit, [:on_off] do | _task, args |
-    on_off = String(args[:on_off]).match?( /true|1|on/ ) ? '1' : 0
+    on_off = String( args[:on_off] ).match?( /true|1|on/ ) ? '1' : 0
     set_it 'AutoSaveOnSubmit', on_off
     status = on_off.to_i.zero? ? 'off' : 'on'
     print_dash_header "Autosave on submit is #{status}."
@@ -136,7 +147,7 @@ namespace 'settings' do
 
   desc 'Set option to autosave open solution before testing.'
   task :autosave_on_test, [:on_off] do | _task, args |
-    on_off = String(args[:on_off]).match?( /true|1|on/ ) ? '1' : 0
+    on_off = String( args[:on_off] ).match?( /true|1|on/ ) ? '1' : 0
     set_it 'AutoSaveOnTest', on_off
     status = on_off.to_i.zero? ? 'off' : 'on'
     print_dash_header "Autosave on Test is #{status}."
@@ -148,22 +159,22 @@ namespace 'tests' do
   task :view_dialogs do
     DialogViewer.select
   end
-  
-  Rake::TestTask.new(:unit) do | task |
-  	task.description = 'Run Unit Tests'
-		task.pattern = 'Test/unit_test_*.rb'
-	end
-	
-	Rake::TestTask.new(:integration) do | task |
-		task.description = 'Run Integration Tests -BBEdit will be brought to front-'
-		task.pattern = 'Test/test_*.rb'
-	end
+
+  Rake::TestTask.new( :unit ) do | task |
+    task.description = 'Run Unit Tests'
+    task.pattern = 'Test/unit_test_*.rb'
+  end
+
+  Rake::TestTask.new( :integration ) do | task |
+    task.description = 'Run Integration Tests -BBEdit will be brought to front-'
+    task.pattern = 'Test/test_*.rb'
+  end
 end
 
 desc 'Set option to autosave open solution before testing.'
 task :tests do
-	puts "****** Running Unit Tests ******"
-	Rake::Task['tests:unit'].invoke
-	puts "\n\n****** Running Integration Tests ******"
-	Rake::Task['tests:integration'].invoke
+  puts '****** Running Unit Tests ******'
+  Rake::Task['tests:unit'].invoke
+  puts "\n\n****** Running Integration Tests ******"
+  Rake::Task['tests:integration'].invoke
 end
