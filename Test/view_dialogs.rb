@@ -78,4 +78,3 @@ module DialogViewer
     dialogs[choices]
   end
 end
-
