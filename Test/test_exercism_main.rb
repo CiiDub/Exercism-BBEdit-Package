@@ -105,6 +105,7 @@ describe 'Exercism *current exercise* methods' do
         '/tmp/log'
       ]
     )
+
     Dir.chdir( @test_dirs.first ) do
       config_content = <<~JSON
         {
@@ -129,7 +130,22 @@ describe 'Exercism *current exercise* methods' do
           "blurb": "test text"
         }
       JSON
+
       File.write 'config.json', config_content
+
+      metadata_content = <<~JSON
+        {
+           "auto_approve" : false,
+           "exercise" : "exercise",
+           "handle" : "chris",
+           "id" : "1",
+           "is_requester" : true,
+           "track" : "track",
+           "url" : "https://exercism.org/tracks/track/exercises/exercise"
+        }
+      JSON
+
+      File.write 'metadata.json', metadata_content
     end
   end
 

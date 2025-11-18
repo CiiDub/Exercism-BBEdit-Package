@@ -33,14 +33,34 @@ end
 describe 'Solutions' do
   before do
     FileUtils.mkdir_p '/tmp/.exercism'
-    @config = Tempfile.new( ['test_solutions_', '.json'], '/tmp/.exercism' )
+    @config   = Tempfile.new( ['test_solutions_', '.json'], '/tmp/.exercism' )
+    @metadata = Tempfile.new( ['test_metadata_', '.json'], '/tmp/.exercism' )
     Solutions.send( :remove_const, :CONFIG_FILE )
     Solutions::CONFIG_FILE = File.basename @config.path
+    Solutions.send( :remove_const, :METADATA )
+    Solutions::METADATA = File.basename @metadata.path
   end
 
   after do
     @config.delete
+    @metadata.delete
     FileUtils.rmdir '/tmp/.exercism'
+  end
+
+  it '#track_name' do
+    @metadata << <<~JSON
+      {
+         "auto_approve" : false,
+         "exercise" : "exercise",
+         "handle" : "chris",
+         "id" : "1",
+         "is_requester" : true,
+         "track" : "track",
+         "url" : "https://exercism.org/tracks/track/exercises/exercise"
+      }
+    JSON
+    @metadata.rewind
+    expect( Solutions.track_name( '/tmp' )).must_equal 'track'
   end
 
   it '#list with one solutions' do
