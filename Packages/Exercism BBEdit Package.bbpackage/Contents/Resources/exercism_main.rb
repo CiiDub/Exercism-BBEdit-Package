@@ -21,10 +21,9 @@ module Exercism
   DOC          = ENV['BB_DOC_NAME'].freeze
   WORKSPACE    = `exercism workspace`.chomp.freeze
   CURRENT_DIR  = ENV['BB_DOC_PATH']&.gsub( DOC, '' ).freeze
-  LOGMAKER     = BBEditStyleLogWriter.new do | current_dir, doc |
+  LOGMAKER     = BBEditStyleLogWriter.new do | doc |
     log   = File.basename doc, '.*'
-    dir   = File.dirname current_dir
-    track = File.basename dir
+    track = Solutions.track_name( exercism_dir( CURRENT_DIR ))
     "{⏜⏝⏜} #{track} #{log}.log"
   end
 
