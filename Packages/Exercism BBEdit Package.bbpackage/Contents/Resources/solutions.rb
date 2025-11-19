@@ -6,6 +6,7 @@ module Solutions
   extend self
 
   CONFIG_FILE = 'config.json'.freeze
+  METADATA = 'metadata.json'.freeze
 
   def choose_if_many( exercise_dir )
     solutions = list exercise_dir
@@ -19,6 +20,13 @@ module Solutions
     JSON
       .parse( config_string )
       .dig 'files', 'solution'
+  end
+
+  def track_name( exercise_dir )
+    metadata = File.read( File.join( exercise_dir, '.exercism', METADATA ))
+    JSON
+      .parse( metadata )
+      .fetch( 'track' )
   end
 
   private
