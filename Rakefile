@@ -115,11 +115,12 @@ desc "Makes a '#{PACKAGE_NAME}' in Packages directory."
 task :build do
   build_path = File.join( 'Packages', PACKAGE_NAME )
   blessed_items = FileList.new( '**/*' ).select { | file | blessed? file }
-  updated_dirs  = make_package_dir_structure( blessed_items, install_dir: build_path )
   project_files = blessed_items.reject { | item | File.directory? item }
-  updated_files = update_install( project_files, install_dir: build_path )
-  deleted_items = remove_orphaned_items( blessed_items, install_dir: build_path )
-  print_updates( updated_files + updated_dirs, deleted_items )
+  make_package_dir_structure( blessed_items, install_dir: build_path )
+  update_install( project_files, install_dir: build_path )
+  Dir.chdir 'Packages' do
+    sh( 'zip', '-q', "#{TITLE}.zip", PACKAGE_NAME, verbose: false )
+  end
 end
 
 namespace 'settings' do

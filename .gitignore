@@ -1,2 +1,5 @@
 # Preview file
 *.md.html
+
+# Build file
+*.bbproject
