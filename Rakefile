@@ -1,4 +1,5 @@
 require 'rake/testtask'
+require 'open3'
 require_relative 'Test/view_dialogs'
 
 TITLE        = 'Exercism BBEdit Package'.freeze
@@ -18,10 +19,16 @@ BBLESSED_PACKAGE_ITEMS = %w[
   Info.plist
 ].freeze
 
+RELEASE_FORMAT = /v\d\.\d\.\d/.freeze
+
 @new_install = false
+@new_release_build = false
 
 directory PACKAGE do
-  print_dash_header "Fresh install of '#{TITLE}'.", "Restart BBEdit if you don't see the commands in the script menu."
+  print_dash_header(
+    "Fresh install of '#{TITLE}'.",
+    "Restart BBEdit if you don't see the commands in the script menu."
+  )
 
   @new_install = true
 end
@@ -78,12 +85,12 @@ def print_dash_header( *lines )
   puts "#{h_rule}\n#{header}\n#{h_rule}"
 end
 
-def print_updates( updated_files, deleted_files )
+def print_updates( updated_files, deleted_files, update_verb: 'installed' )
   header =
-    if updated_files.empty?
+    if updated_files.empty? && deleted_files.empty?
       Time.now.strftime( "#{TITLE} is up to date as of: %H:%M:%S - %m/%d/%y" )
     else
-      Time.now.strftime( "#{TITLE} installed or updated these files at: %H:%M:%S - %m/%d/%y" )
+      Time.now.strftime( "#{TITLE} #{update_verb} or updated these files at: %H:%M:%S - %m/%d/%y" )
     end
   print_dash_header( header )
   updated_files.each { | f | puts "✓ - #{f}" }
@@ -111,16 +118,48 @@ task :uninstall do
   print_dash_header "'#{TITLE}' was removed from BBEdit"
 end
 
-desc "Makes a '#{PACKAGE_NAME}' in Packages directory."
-task :build do
+desc "Makes or updates '#{PACKAGE_NAME}' in Packages directory."
+task :build do | task |
+  callers = task.application.top_level_tasks
+  output, _error, _status = Open3.capture3( 'git', 'status', '--short' )
+  abort( "Commit changes before calling #{callers.first}." ) unless output.empty?
+
   build_path = File.join( 'Packages', PACKAGE_NAME )
   blessed_items = FileList.new( '**/*' ).select { | file | blessed? file }
+  updated_dirs  = make_package_dir_structure( blessed_items, install_dir: build_path )
   project_files = blessed_items.reject { | item | File.directory? item }
-  make_package_dir_structure( blessed_items, install_dir: build_path )
-  update_install( project_files, install_dir: build_path )
-  Dir.chdir 'Packages' do
-    sh( 'zip', '-q', "#{TITLE}.zip", PACKAGE_NAME, verbose: false )
+  updated_files = update_install( project_files, install_dir: build_path )
+  deleted_items = remove_orphaned_items( blessed_items, install_dir: build_path )
+  if callers.grep( /^release/ ).empty?
+    print_updates(
+      updated_files + updated_dirs,
+      deleted_items,
+      update_verb: 'added to build'
+    )
+  else
+    @new_release_build = !updated_files.empty? || !deleted_items.empty?
   end
+end
+
+desc 'Makes a zipped file and commit \'release\' with the latest package build and git tag.'
+task :release, [:version] => :build do | _t, args |
+  tag = args[:version]
+  abort( 'Provide a release version, such as: \'rake release[v0.0.0]\'.' ) if tag.nil?
+
+  abort( 'Provide a release version formatted as so: v0.0.0' ) unless tag.match?( RELEASE_FORMAT )
+
+  zip_name = TITLE.downcase.gsub( ' ', '_' )
+  Dir.chdir 'Packages' do
+    sh( "zip -q -r '#{zip_name}_#{tag}.zip' '#{PACKAGE_NAME}'", verbose: false ) if @new_release_build
+  end
+  abort( "No changes have been made for release #{tag}" ) if `git status -s`.empty?
+
+  release_msg = Time.now.strftime( "Release #{tag} created: %H:%M:%S - %m/%d/%y" )
+  sh( "git tag -d #{tag} > /dev/null", verbose: false ) if `git tag`.split( "\n" ).include? tag
+  sh( "git add Packages/#{zip_name}_#{tag}.zip > /dev/null", verbose: false )
+  sh( "git commit -m 'Release #{release_msg}' > /dev/null", verbose: false )
+  sh( "git tag #{tag} > /dev/null", verbose: false )
+  print_dash_header release_msg
 end
 
 namespace 'settings' do

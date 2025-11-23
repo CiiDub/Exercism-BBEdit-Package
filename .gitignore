@@ -3,4 +3,4 @@
 
 # Build file
 !Packages/*.zip
-**/*.bbpackage
+Packages/*.bbpackage/
