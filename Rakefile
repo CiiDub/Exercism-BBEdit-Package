@@ -153,11 +153,9 @@ task :release, [:version, :force] => :build do | _t, args |
     rm_rf( "#{zip_name}_#{tag}.zip" ) if args[:force]
     sh( "zip -q -r '#{zip_name}_#{tag}.zip' '#{PACKAGE_NAME}'", verbose: false ) if @new_release_build || args[:force]
   end
-  abort( "No changes have been made for release #{tag}" ) if `git status -s`.empty?
 
   release_msg = Time.now.strftime( "Release #{tag} created: %H:%M:%S - %m/%d/%y" )
   sh( "git tag -d #{tag} > /dev/null", verbose: false ) if `git tag`.split( "\n" ).include? tag
-  sh( "git add Packages/#{zip_name}_#{tag}.zip > /dev/null", verbose: false )
   sh( "git commit --allow-empty -m 'Release #{release_msg}' > /dev/null", verbose: false )
   sh( "git tag #{tag} > /dev/null", verbose: false )
   print_dash_header release_msg
