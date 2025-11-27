@@ -22,23 +22,26 @@ I’m in no way affiliated with Bare Bones or Exercism. I just did this for fun.
 
 ## Installation
 ### Download and install the package
+_No fuss, no muss_
 1. Go to the release section of this Github page.
 
-1. From the most recent release click and download a file ‘exercism_bbedit_package_vx.x.x.zip file.
+1. From the most recent release click and download a file ‘exercism_bbedit_package_vx.x.x.zip’.
 
-1. Unzip the download with a double click. That will produce a file call ‘Exercism BBEdit Package.bbpackage’.
+1. Unzip the download with a double click.  
+That will produce a file call ‘Exercism BBEdit Package.bbpackage’.
 
-1. Double click the package and it will be installed. 
+1. Double click the package and BBEdit will installed it for use.  
 If it doesn’t show up in BBEdit restart it.
 
-### Install the project
+### Install from the project
+_When you have every intention to fuss and/or muss_
 1. Clone the project where you like to keep projects.
 	
 	```
 	$ cd ~/projects
 	$ git clone git@github.com:CiiDub/Exercism-BBEdit-Package.git'
 	```
-1. Navigate to the project and run the install rake command.
+1. Navigate to the project and run `rake install` command.
 
 	```
 	$ cd Exercism-BBEdit-Package
