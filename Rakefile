@@ -19,7 +19,7 @@ BBLESSED_PACKAGE_ITEMS = %w[
   Info.plist
 ].freeze
 
-RELEASE_FORMAT = /v\d\.\d\.\d/.freeze
+RELEASE_FORMAT = /v\d+\.\d+\.\d+/.freeze
 
 @new_install = false
 @new_release_build = false
@@ -141,8 +141,8 @@ task :build do | task |
   end
 end
 
-desc 'Makes a zipped file and commit \'release\' with the latest package build and git tag.'
-task :release, [:version] => :build do | _t, args |
+desc 'Makes a zipped file and empty commit \'release\' with latest package build and provided git tag.'
+task :release, [:version, :force] => :build do | _t, args |
   tag = args[:version]
   abort( 'Provide a release version, such as: \'rake release[v0.0.0]\'.' ) if tag.nil?
 
@@ -150,14 +150,15 @@ task :release, [:version] => :build do | _t, args |
 
   zip_name = TITLE.downcase.gsub( ' ', '_' )
   Dir.chdir 'Packages' do
-    sh( "zip -q -r '#{zip_name}_#{tag}.zip' '#{PACKAGE_NAME}'", verbose: false ) if @new_release_build
+    rm_rf( "#{zip_name}_#{tag}.zip" ) if args[:force]
+    sh( "zip -q -r '#{zip_name}_#{tag}.zip' '#{PACKAGE_NAME}'", verbose: false ) if @new_release_build || args[:force]
   end
   abort( "No changes have been made for release #{tag}" ) if `git status -s`.empty?
 
   release_msg = Time.now.strftime( "Release #{tag} created: %H:%M:%S - %m/%d/%y" )
   sh( "git tag -d #{tag} > /dev/null", verbose: false ) if `git tag`.split( "\n" ).include? tag
   sh( "git add Packages/#{zip_name}_#{tag}.zip > /dev/null", verbose: false )
-  sh( "git commit -m 'Release #{release_msg}' > /dev/null", verbose: false )
+  sh( "git commit --allow-empty -m 'Release #{release_msg}' > /dev/null", verbose: false )
   sh( "git tag #{tag} > /dev/null", verbose: false )
   print_dash_header release_msg
 end

@@ -2,5 +2,4 @@
 *.md.html
 
 # Build file
-!Packages/*.zip
 Packages/*.bbpackage/
