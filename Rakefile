@@ -150,7 +150,7 @@ task :release, [:version, :force] => :build do | _t, args |
 
   zip_name = TITLE.downcase.gsub( ' ', '_' )
   Dir.chdir 'Packages' do
-    rm_rf( "#{zip_name}_#{tag}.zip" ) if args[:force]
+    rm_rf( "#{zip_name}_#{tag}.zip", verbose: false ) if args[:force]
     sh( "zip -q -r '#{zip_name}_#{tag}.zip' '#{PACKAGE_NAME}'", verbose: false ) if @new_release_build || args[:force]
   end
 

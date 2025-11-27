@@ -21,6 +21,17 @@ I’m in no way affiliated with Bare Bones or Exercism. I just did this for fun.
 - I developed this on MacOS Sonoma (14.x.x) and Sequoia (15.x.x).
 
 ## Installation
+### Download and install the package
+1. Go to the release section of this Github page.
+
+1. From the most recent release click and download a file ‘exercism_bbedit_package_vx.x.x.zip file.
+
+1. Unzip the download with a double click. That will produce a file call ‘Exercism BBEdit Package.bbpackage’.
+
+1. Double click the package and it will be installed. 
+If it doesn’t show up in BBEdit restart it.
+
+### Install the project
 1. Clone the project where you like to keep projects.
 	
 	```
