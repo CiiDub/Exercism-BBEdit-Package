@@ -14,7 +14,7 @@ module ExercismCLICalls
   end
 
   def call_download( track, exercise, force_flag )
-    Open3.capture2e( 'exercism', 'download', "#{force_flag}", "--track=#{track}", "--exercise=#{exercise}" )
+    Open3.capture2e( 'exercism', 'download', force_flag, "--track=#{track}", "--exercise=#{exercise}" )
   end
 
   def call_submit( dir )
