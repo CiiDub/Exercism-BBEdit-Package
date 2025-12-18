@@ -1,5 +1,7 @@
-# Local App Files
-.nova/**/*
+# Dev Stuff
+.tool-versions
+.ruby-version
+.rubocop.yml
 
 # Preview Files
 *.md.html
