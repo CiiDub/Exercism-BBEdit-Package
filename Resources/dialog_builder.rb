@@ -1,13 +1,13 @@
 require 'open3'
 
-# A helper module to build Applescrit dialog boxes.
+# A helper module to build AppleScript dialog boxes.
 module DialogBuilder
   extend self
 
   def display_chooser_with( items:, prompt:, default_items: [items[0]], multiselect: false )
     make_list_string = ->( strs ) {
       strs
-        .map { | item | "\"" + item + "\"" }
+        .map { | item | "\"#{item}\"" }
         .join ', '
     }
 
