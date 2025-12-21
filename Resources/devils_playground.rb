@@ -6,9 +6,9 @@ module StringExtentions
   #   2) Don't capitalize articles, short prepositions or coordinating conjunctions unless rule one applies.
   #   3) Skip pre-capitalized words.
   module TitleCase
-    ARTICLES = %w[a an the].freeze
-    PREPOSITIONS = %w[for in on to at by from].freeze
-    CONJUNCTIONS = %w[and but or nor for so yet].freeze
+    ARTICLES     = Set.new( %w[a an the] ).freeze
+    PREPOSITIONS = Set.new( %w[for in on to at by from] ).freeze
+    CONJUNCTIONS = Set.new( %w[and but or nor for so yet] ).freeze
 
     refine String do
       def titlecase
@@ -33,7 +33,7 @@ module StringExtentions
 
     def self.capitalize?( word, index )
       special_words = ARTICLES | PREPOSITIONS | CONJUNCTIONS
-      return false if ( special_words.include?( word ) && index.positive? ) || /[A-Z]/.match?( word )
+      return false if ( special_words.include?( word ) && !index.zero? ) || /[A-Z]/.match?( word )
 
       true
     end
