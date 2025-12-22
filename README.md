@@ -14,7 +14,7 @@ I’m in no way affiliated with Bare Bones or Exercism. I just did this for fun.
 
 - BBEdit, I’ve only test this on version 15.x.x but I suspect older versions will work as well.
 
-- The Exercism [command line tools](https://exercism.org/docs/using/solving-exercises/working-locally), as of version 3.4.1.
+- The Exercism [command line tools](https://exercism.org/docs/using/solving-exercises/working-locally), as of version 3.5.8.
 
 - Ruby 2.7.4 and up.
 
@@ -31,7 +31,7 @@ _No fuss, no muss_
 That will produce a file call ‘Exercism BBEdit Package.bbpackage’.
 
 1. Double click the package and BBEdit will installed it for use.  
-If it doesn’t show up in BBEdit restart it.
+If it doesn’t show up in BBEdit, restart it.
 
 ### Install from the project
 _When you have every intention to fuss and/or muss_
@@ -127,7 +127,7 @@ rake settings:tag_on_test[tag_name]
 So passing “on” to the two autosave commands will save the open exercise file when you run `⇡✌︎ Submit This Exercise` and `⚖︎ Test This Exercise` respectively.
 
 > [!NOTE]
-> Both autosave settings are on by default now.
+> Both autosave settings are on by default.
 
 It will look like this in the terminal.
 
@@ -184,17 +184,16 @@ This feature requires that you install two ruby gems. In your terminal use these
 	_Only required for syntax highlighting in code blocks._
 
 > [!TIP]
-> ###### How I use BBEdit with Exercism
+> ##### How I use BBEdit with Exercism
 > 
 > When you install the Exercism tools on your system it will create a folder in your home directory. It’s the Exercism workspace.
 > 
 > I made a BBEdit project with the workspace as it’s root.
-> 
-> ###### You might not want this package_
+> ##### You might not want this package
 > 
 > Every project has a [Unix Worksheet](https://www.barebones.com/products/bbedit/benefitsintegrate.html#worksheet). It’s a text document married with a terminal shell. Type a shell command, control return on that line, then see the results on proceeding lines.
 > 
-> Because it’s a text document you can leave common commands in place then just cd in to different tracks and exercises.
+> Because it’s a text document you can leave common commands in place then just `cd` in to different tracks and exercises.
 > 
 > You might have a unix worksheet like this attached to your Exercism project.
 > 
@@ -220,5 +219,5 @@ This feature requires that you install two ruby gems. In your terminal use these
 > 13 runs, 13 assertions, 0 failures, 0 errors, 0 skips
 > ```
 > 
-> It’s a very flexible way to work.
+> It’s a very flexible way to work, and only requires native features of BBEdit and the Exercism CLI.
 
