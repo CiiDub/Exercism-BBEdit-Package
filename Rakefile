@@ -100,7 +100,7 @@ end
 desc "Installs #{TITLE} for use with BBEdit"
 task install: PACKAGE do
   blessed_items = FileList.new( '**/*' ).select { | file | blessed? file }
-  updated_dirs = make_package_dir_structure( blessed_items )
+  updated_dirs  = make_package_dir_structure( blessed_items )
   project_files = blessed_items.reject { | item | File.directory? item }
   updated_files = update_install( project_files )
   deleted_items = remove_orphaned_items( blessed_items )
@@ -124,7 +124,7 @@ task :build do | task |
   output, _error, _status = Open3.capture3( 'git', 'status', '--short' )
   abort( "Commit changes before calling #{callers.first}." ) unless output.empty?
 
-  build_path = File.join( 'Packages', PACKAGE_NAME )
+  build_path    = File.join( 'Packages', PACKAGE_NAME )
   blessed_items = FileList.new( '**/*' ).select { | file | blessed? file }
   updated_dirs  = make_package_dir_structure( blessed_items, install_dir: build_path )
   project_files = blessed_items.reject { | item | File.directory? item }
@@ -153,12 +153,16 @@ task :release, [:version, :force] => :build do | _t, args |
     rm_rf( "#{zip_name}_#{tag}.zip", verbose: false ) if args[:force]
     sh( "zip -q -r '#{zip_name}_#{tag}.zip' '#{PACKAGE_NAME}'", verbose: false ) if @new_release_build || args[:force]
   end
-
-  release_msg = Time.now.strftime( "Release #{tag} created: %H:%M:%S - %m/%d/%y" )
-  sh( "git tag -d #{tag} > /dev/null", verbose: false ) if `git tag`.split( "\n" ).include? tag
-  sh( "git commit --allow-empty -m 'Release #{release_msg}' > /dev/null", verbose: false )
-  sh( "git tag #{tag} > /dev/null", verbose: false )
-  print_dash_header release_msg
+  if @new_release_build || args[:force]
+    release_msg = Time.now.strftime( "Release #{tag} created: %H:%M:%S - %m/%d/%y" ) if @new_release_build
+    release_msg = Time.now.strftime( "Release #{tag} re-created: %H:%M:%S - %m/%d/%y" ) if args[:force]
+    sh( "git tag -d #{tag} > /dev/null", verbose: false ) if `git tag`.split( "\n" ).include? tag
+    sh( "git commit --allow-empty -m 'Release #{release_msg}' > /dev/null", verbose: false )
+    sh( "git tag #{tag} > /dev/null", verbose: false )
+    print_dash_header release_msg
+  else
+    print_dash_header 'No new release was created as the files have not changed. Use \'rake release[v0.0.0,force]\''
+  end
 end
 
 namespace 'settings' do
