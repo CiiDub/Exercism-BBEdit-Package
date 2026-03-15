@@ -42,7 +42,7 @@ class SyntaxHighlightRenderer < Redcarpet::Render::HTML
 	
 	def preprocess(markdown_doc)
 		nested_md = Redcarpet::Markdown.new(self, RENDER_OPTIONS)
-		markdown_doc.gsub!( %r[^~{4}exercism/(note|caution|advanced)\n([\s\S]*?)~{4}$] ) do | _ |
+		markdown_doc.gsub!( %r[^~{4}exercism/(note|caution|advanced)\n([\s\S]*?)~{4}$] ) do
 			type    = $~[1]
 			content = nested_md.render($~[2].chomp)
 			icon    = /note|advanced/ === type ? :info : :caution
