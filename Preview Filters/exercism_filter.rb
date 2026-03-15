@@ -2,6 +2,8 @@
 
 require 'redcarpet'
 
+ARGF.set_encoding('UTF-8')
+
 module Compatability
 	private
 	
